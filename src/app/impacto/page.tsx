@@ -4,7 +4,7 @@ import { ImpactDashboard } from "@/features/impact/ImpactDashboard";
 
 export const metadata: Metadata = {
   title: "Impacto Evangelístico",
-  description: "Metas, actividades registradas, finalizaciones globales y proyecciones de alcance.",
+  description: "Enseñanzas completadas y respuestas voluntarias de quienes escanean los códigos QR.",
 };
 
 export default function ImpactPage() {

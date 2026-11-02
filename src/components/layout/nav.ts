@@ -4,8 +4,6 @@ export const navItems = [
   { href: "/conociendo-a-jesus/", label: "Conociendo a Jesús", short: "Conocer a Jesús" },
   { href: "/qr/", label: "Generar QR" },
   { href: "/impacto/", label: "Impacto Evangelístico", short: "Impacto" },
-  { href: "/metas/", label: "Metas" },
-  { href: "/actividades/", label: "Actividades" },
   { href: "/acerca/", label: "Acerca" },
 ] as const;
 
@@ -17,11 +15,9 @@ export const primaryMobile = [
   { href: "/qr/", label: "QR", icon: "qr" },
 ] as const;
 
-/** Resto de secciones, en el panel «Más». */
+/** Resto de secciones, en el panel «Más». (Metas y Actividades están ocultas del menú.) */
 export const moreItems = [
   { href: "/impacto/", label: "Impacto Evangelístico" },
-  { href: "/metas/", label: "Metas" },
-  { href: "/actividades/", label: "Actividades" },
   { href: "/acerca/", label: "Acerca del proyecto" },
   { href: "/privacidad/", label: "Privacidad" },
 ] as const;

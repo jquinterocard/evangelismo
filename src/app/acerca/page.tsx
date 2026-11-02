@@ -47,7 +47,7 @@ export default function AboutPage() {
           <ol className="list-inside list-decimal space-y-1">
             <li>Genera tus códigos QR y descarga las tarjetas listas para imprimir.</li>
             <li>Compártelos con respeto: en tu barrio, trabajo, iglesia o con tu familia.</li>
-            <li>Si quieres, registra tus actividades y define metas para perseverar.</li>
+            <li>Mira en Impacto cuántas enseñanzas se completaron y cuántas respuestas pidieron seguir conociendo a Jesús.</li>
           </ol>
           <div className="mt-2 flex flex-col gap-3 sm:flex-row">
             <LinkButton href="/qr/" icon={<QrCode className="size-5" aria-hidden />}>

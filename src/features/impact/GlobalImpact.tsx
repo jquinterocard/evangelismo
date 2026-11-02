@@ -3,16 +3,11 @@
 import Link from "next/link";
 import { useState } from "react";
 import { BookCheck, CloudOff, Heart, Percent, RefreshCw, SkipForward, ThumbsDown, HelpCircle } from "lucide-react";
-import type { Goal } from "@/types";
 import { StatCard } from "@/components/ui/StatCard";
 import { Button } from "@/components/ui/Button";
-import { useStore } from "@/hooks/useStore";
-import { activitiesStore, qrHistoryStore } from "@/lib/stores";
 import { addDays, endOfMonth, formatShortDate, startOfMonth, todayISO } from "@/lib/dates";
 import { teachingRepository } from "@/features/teachings/repository";
 import { useGlobalDaily, useTopTeachings } from "@/features/completions/useGlobalStats";
-import { GoalCard } from "@/features/goals/GoalCard";
-import { isGlobalMetric } from "@/features/goals/model";
 import { ChartCard, StackedBars, type Series } from "./charts";
 import { bucketize, monthRanges, weekRanges } from "./aggregate";
 import { computeProjection, fmt, positiveInterestRate } from "./projections";
@@ -25,7 +20,7 @@ const responseSeries: Series[] = [
   { key: "skipped", label: "Preguntas omitidas", color: "#8A96A3" },
 ];
 
-export function GlobalImpact({ goals }: { goals: Goal[] }) {
+export function GlobalImpact() {
   const today = todayISO();
   const [refresh, setRefresh] = useState(0);
   const months = monthRanges(today, 6);
@@ -34,9 +29,6 @@ export function GlobalImpact({ goals }: { goals: Goal[] }) {
   const daily = useGlobalDaily(from, today, refresh);
   const last30From = addDays(today, -29);
   const top = useTopTeachings(last30From, today, refresh);
-  const activities = useStore(activitiesStore);
-  const qrHistory = useStore(qrHistoryStore);
-  const globalGoals = goals.filter((g) => isGlobalMetric(g.metric) && g.endDate >= today);
 
   const header =
     daily.status !== "not_configured" ? (
@@ -201,24 +193,6 @@ export function GlobalImpact({ goals }: { goals: Goal[] }) {
         )}
       </div>
 
-      <div className="flex flex-col gap-3">
-        <h3 className="text-lg font-semibold">Metas de alcance (indicadores globales)</h3>
-        {globalGoals.length === 0 ? (
-          <p className="text-sm text-muted">
-            Puedes crear metas semanales o mensuales de enseñanzas completadas, respuestas positivas o participación voluntaria en{" "}
-            <Link href="/metas/" className="font-bold text-navy underline">
-              Metas
-            </Link>
-            .
-          </p>
-        ) : (
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {globalGoals.map((g) => (
-              <GoalCard key={g.id} goal={g} activities={activities} qrHistory={qrHistory} />
-            ))}
-          </div>
-        )}
-      </div>
     </section>
   );
 }

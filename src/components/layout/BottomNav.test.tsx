@@ -35,9 +35,11 @@ describe("navegación móvil", () => {
     setup();
     await user.click(screen.getByRole("button", { name: "Más" }));
     const dialog = screen.getByRole("dialog", { name: "Más secciones" });
-    for (const name of ["Impacto Evangelístico", "Metas", "Actividades", "Acerca del proyecto"]) {
+    for (const name of ["Impacto Evangelístico", "Acerca del proyecto", "Privacidad"]) {
       expect(dialog).toContainElement(screen.getByRole("link", { name }));
     }
+    expect(screen.queryByRole("link", { name: "Metas" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("link", { name: "Actividades" })).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: /Modo noche/ })).toBeInTheDocument();
     await user.keyboard("{Escape}");
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
