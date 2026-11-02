@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { LocalDataNotice } from "@/components/LocalDataNotice";
 import { GoalManager } from "@/features/goals/GoalManager";
 
 export const metadata: Metadata = {
@@ -18,7 +17,6 @@ export default function GoalsPage() {
         illustration="path"
       />
       <div className="container-page flex flex-col gap-6 py-10">
-        <LocalDataNotice />
         <GoalManager />
       </div>
     </>
