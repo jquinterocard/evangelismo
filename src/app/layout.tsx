@@ -12,6 +12,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { ToastProvider } from "@/components/ui/Toast";
 import { ServiceWorkerRegister } from "@/components/layout/ServiceWorkerRegister";
+import { contentSecurityPolicy } from "@/lib/csp";
 
 export const metadata: Metadata = {
   metadataBase: appConfig.siteUrl ? new URL(`${appConfig.siteUrl}/`) : undefined,
@@ -48,6 +49,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="es" className="h-full antialiased">
+      <head>
+        {process.env.NODE_ENV === "production" && <meta httpEquiv="Content-Security-Policy" content={contentSecurityPolicy()} />}
+        <meta name="referrer" content="strict-origin-when-cross-origin" />
+      </head>
       <body className="flex min-h-full flex-col">
         <ToastProvider>
           <Header />

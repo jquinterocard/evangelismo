@@ -37,7 +37,7 @@ export function HomeLanding() {
               </LinkButton>
             </div>
           </div>
-          <div className="relative mx-auto w-full max-w-sm md:max-w-md">
+          <div className="relative mx-auto w-full max-w-[15rem] sm:max-w-sm md:max-w-md">
             <JesusOpenArms title="Ilustración de Jesús con los brazos abiertos" className="relative w-full drop-shadow-sm" />
             <Dove className="absolute top-4 -right-2 h-16 w-auto motion-safe:animate-float sm:h-20" />
           </div>

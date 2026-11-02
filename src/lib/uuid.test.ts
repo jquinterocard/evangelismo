@@ -8,7 +8,7 @@ describe("UUID", () => {
     for (const id of ids) expect(id).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/);
   });
   it("usa getRandomValues si randomUUID no existe", () => {
-    const id = generateUuid({ getRandomValues: <T extends ArrayBufferView | null>(a: T) => crypto.getRandomValues(a as Uint8Array) as T });
+    const id = generateUuid({ getRandomValues: <T extends ArrayBufferView | null>(a: T) => crypto.getRandomValues(a as Uint8Array) as unknown as T });
     expect(isUuid(id)).toBe(true);
     expect(id[14]).toBe("4");
   });

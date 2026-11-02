@@ -56,7 +56,7 @@ export function Header() {
       <div className="container-page flex h-16 items-center gap-3">
         <Link href="/" className="flex min-w-0 items-center gap-2.5" aria-label={`${appConfig.name}, inicio`}>
           <Logo className="size-9 shrink-0" />
-          <span className="truncate font-serif text-lg font-semibold text-navy-ink">{appConfig.name}</span>
+          <span className="truncate font-serif text-base font-semibold text-navy-ink sm:text-lg">{appConfig.name}</span>
         </Link>
 
         <nav aria-label="Principal" className="ml-auto hidden lg:block">

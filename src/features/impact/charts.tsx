@@ -179,7 +179,7 @@ export function StackedBars({
   const vertical = layout === "vertical";
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <BarChart data={rows} layout={layout} margin={{ top: 4, right: 8, bottom: 0, left: vertical ? 8 : -16 }} barCategoryGap="22%">
+      <BarChart data={rows} layout={layout} margin={{ top: 4, right: 8, bottom: 0, left: vertical ? 8 : 0 }} barCategoryGap="22%">
         <CartesianGrid stroke={GRID} vertical={vertical} horizontal={!vertical} />
         {vertical ? (
           <>
@@ -227,7 +227,7 @@ export function TrendLines({
   const all: Series[] = target ? [...series, { key: "__target", label: "Meta", color: "#8A96A3", dashed: true }] : series;
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <LineChart data={withTarget} margin={{ top: 4, right: 12, bottom: 0, left: -16 }}>
+      <LineChart data={withTarget} margin={{ top: 4, right: 12, bottom: 0, left: 0 }}>
         <CartesianGrid stroke={GRID} vertical={false} />
         <XAxis dataKey={xKey} tick={AXIS} axisLine={false} tickLine={false} tickFormatter={formatShortDate} minTickGap={16} />
         <YAxis allowDecimals={false} tick={AXIS} axisLine={false} tickLine={false} width={44} />

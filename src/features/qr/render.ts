@@ -187,7 +187,7 @@ export function renderCardSvg(text: string, style: QrStyle, phrase: string = app
       .join("") +
     `<rect x="190" y="530" width="820" height="820" rx="48" fill="#fff" stroke="#E6E3DA" stroke-width="3"/>` +
     qrData +
-    `<text x="600" y="1460" text-anchor="middle" font-family="'Nunito Sans', 'Segoe UI', Arial, sans-serif" font-size="52" font-weight="800" fill="#14283E">${escapeXml(appConfig.scanInstruction)}</text>` +
+    `<text x="600" y="1460" text-anchor="middle" font-family="'Nunito Sans', 'Segoe UI', Arial, sans-serif" font-size="44" font-weight="800" fill="#14283E" textLength="1000" lengthAdjust="spacingAndGlyphs">${escapeXml(appConfig.scanInstruction)}</text>` +
     `<text x="600" y="1530" text-anchor="middle" font-family="'Nunito Sans', 'Segoe UI', Arial, sans-serif" font-size="34" fill="#4F5D6B">Apunta la cámara de tu celular al código</text>` +
     `<g transform="translate(570 1600)"><rect x="24" y="0" width="12" height="70" rx="3" fill="#D8B56A"/><rect x="6" y="18" width="48" height="12" rx="3" fill="#D8B56A"/></g>` +
     `</svg>`

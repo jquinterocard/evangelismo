@@ -45,7 +45,7 @@ export const appConfig = {
   bible: {
     version: "NVI",
     copyright:
-      "Texto bíblico tomado de la Santa Biblia, NUEVA VERSIÓN INTERNACIONAL® NVI® © 1999, 2015, 2022 por Biblica, Inc.®, Inc.® Usado con permiso de Biblica, Inc.® Reservados todos los derechos en todo el mundo.",
+      "Texto bíblico tomado de la Santa Biblia, NUEVA VERSIÓN INTERNACIONAL® NVI® © 1999, 2015, 2022 por Biblica, Inc.® Usado con permiso de Biblica, Inc.® Reservados todos los derechos en todo el mundo.",
     /** Enlace externo para leer el pasaje completo. */
     passageUrl: (reference: string) =>
       `https://www.biblegateway.com/passage/?search=${encodeURIComponent(reference)}&version=NVI`,
