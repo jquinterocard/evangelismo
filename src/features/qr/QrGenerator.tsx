@@ -9,11 +9,11 @@ import { EmptyState } from "@/components/ui/EmptyState";
 import { useStore, useHydrated } from "@/hooks/useStore";
 import { usePublicBase } from "@/hooks/usePublicBase";
 import { preferencesStore, qrHistoryStore } from "@/lib/stores";
-import { downloadBlob, downloadText } from "@/lib/backup";
+import { downloadBlob } from "@/lib/backup";
 import { copyText, shareOrCopy } from "@/lib/share";
 import { isHexColor } from "@/lib/sanitize";
 import { appConfig } from "@/lib/config";
-import { legibilityWarnings, QR_TEMPLATES, renderCardSvg, renderQrSvg, type QrStyle } from "./render";
+import { legibilityWarnings, QR_TEMPLATES, renderQrSvg, type QrStyle } from "./render";
 import { buildZip, cardPng, fileBase, qrPng, svgToDataUrl, type BatchFormat } from "./export";
 import { createQrRecords, saveQrRecords } from "./history";
 
@@ -80,22 +80,12 @@ export function QrGenerator() {
       downloadBlob(await qrPng(current.url, style), `${fileBase(current.id)}.png`);
       remember(current);
     });
-  const downloadSvg = () => {
-    if (!current) return;
-    downloadText(renderQrSvg(current.url, style).svg, `${fileBase(current.id)}.svg`, "image/svg+xml");
-    remember(current);
-  };
   const downloadCardPng = () =>
     current &&
     run(async () => {
       downloadBlob(await cardPng(current.url, style), `${fileBase(current.id)}-tarjeta.png`);
       remember(current);
     });
-  const downloadCardSvg = () => {
-    if (!current) return;
-    downloadText(renderCardSvg(current.url, style), `${fileBase(current.id)}-tarjeta.svg`, "image/svg+xml");
-    remember(current);
-  };
 
   async function copyUrl() {
     if (!current) return;
@@ -164,14 +154,8 @@ export function QrGenerator() {
           <Button onClick={downloadPng} disabled={!current || busy} icon={<Download className="size-4" aria-hidden />}>
             PNG
           </Button>
-          <Button onClick={downloadSvg} disabled={!current} icon={<Download className="size-4" aria-hidden />}>
-            SVG
-          </Button>
           <Button onClick={downloadCardPng} variant="secondary" disabled={!current || busy} icon={<IdCard className="size-4" aria-hidden />}>
             Tarjeta PNG
-          </Button>
-          <Button onClick={downloadCardSvg} variant="secondary" disabled={!current} icon={<IdCard className="size-4" aria-hidden />}>
-            Tarjeta SVG
           </Button>
           <Button onClick={copyUrl} variant="ghost" disabled={!current} icon={<Copy className="size-4" aria-hidden />}>
             Copiar URL
