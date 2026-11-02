@@ -1,4 +1,4 @@
-/** Exportación de QR: PNG (rasterizando el SVG en canvas), SVG y lotes ZIP. */
+/** Exportación de QR: PNG (rasterizando el SVG en canvas) y lotes ZIP. */
 import type { QrRecord } from "@/types";
 import { renderCardSvg, renderQrSvg, type QrStyle } from "./render";
 import { toCsv } from "@/lib/backup";
@@ -28,7 +28,7 @@ export async function svgToPngBlob(svg: string, width: number, height: number): 
   );
 }
 
-export type BatchFormat = "png" | "svg" | "card";
+export type BatchFormat = "png" | "card";
 
 export function fileBase(id: string): string {
   return `qr-${id.slice(0, 8)}`;
@@ -54,7 +54,6 @@ export async function buildZip(
   let done = 0;
   for (const r of records) {
     const base = fileBase(r.id);
-    if (formats.includes("svg")) zip.file(`svg/${base}.svg`, renderQrSvg(r.url, style).svg);
     if (formats.includes("png")) zip.file(`png/${base}.png`, await qrPng(r.url, style));
     if (formats.includes("card")) zip.file(`tarjetas/${base}-tarjeta.png`, await cardPng(r.url, style));
     onProgress?.(++done, records.length);

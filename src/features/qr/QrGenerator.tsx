@@ -33,7 +33,7 @@ export function QrGenerator() {
 
   const [current, setCurrent] = useState<QrRecord | null>(null);
   const [batchCount, setBatchCount] = useState(10);
-  const [formats, setFormats] = useState<BatchFormat[]>(["png", "svg"]);
+  const [formats, setFormats] = useState<BatchFormat[]>(["png", "card"]);
   const [progress, setProgress] = useState<{ done: number; total: number } | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -137,7 +137,6 @@ export function QrGenerator() {
             </div>
           )}
         </div>
-        {current && <p className="w-full text-center font-mono text-xs break-all text-muted">{current.url}</p>}
         {warnings.length > 0 && (
           <ul className="w-full rounded-xl bg-gold-soft p-3 text-sm text-gold-ink" role="alert">
             {warnings.map((w) => (
@@ -284,7 +283,6 @@ export function QrGenerator() {
                 {(
                   [
                     ["png", "PNG"],
-                    ["svg", "SVG"],
                     ["card", "Tarjetas"],
                   ] as const
                 ).map(([f, label]) => (

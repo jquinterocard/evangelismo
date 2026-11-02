@@ -23,7 +23,7 @@ cualquier hosting estático.
   enlace y volver al inicio. No pide datos personales.
 - **Generador QR** (`/qr`): UUID v4, URL pública tomada de la compilación, color, fondo, tamaño, margen y 5
   plantillas (cruz, corazón, paloma, Biblia, minimalista). Con emblema usa corrección H y el
-  emblema ocupa ≤ 20 % del lado. Descarga PNG, SVG, tarjeta imprimible (PNG/SVG) y lotes ZIP de
+  emblema ocupa ≤ 20 % del lado. Descarga PNG, tarjeta imprimible (PNG) y lotes ZIP de
   1–100 códigos con `manifest.csv`. Historial local.
 - **Catálogo** (`/ensenanzas`) con búsqueda sin tildes y filtro por tema; cada enseñanza tiene su
   página estática.
@@ -120,7 +120,7 @@ src/app/                 rutas (/, ensenanza, ensenanzas/[id], conociendo-a-jesu
 src/components/          UI base, layout (Header/Footer/SW) e ilustraciones SVG originales
 src/data/                categorías, enseñanzas (teachings/group-*.ts) y ruta de aprendizaje
 src/features/teachings/  repositorio del catálogo, selección aleatoria, vista y experiencia de escaneo
-src/features/qr/         render SVG/PNG, tarjetas, ZIP, historial, configuración de URL
+src/features/qr/         render PNG, tarjetas, ZIP e historial
 src/features/completions/cliente Supabase (RPC), panel de la pregunta de interés, hooks de estadísticas
 src/features/interest/   pregunta voluntaria y seguimiento positivo/negativo
 src/features/activities/ modelo, formulario y gestor de actividades
