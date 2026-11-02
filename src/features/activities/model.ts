@@ -20,12 +20,13 @@ export const ACTIVITY_HINTS: Record<ActivityType, string> = {
   faith_decision_reported: "Solo cuando la persona lo comunicó voluntariamente.",
 };
 
+/** Paleta categórica validada (orden fijo; CVD con apoyo de leyenda y tabla). */
 export const ACTIVITY_COLORS: Record<ActivityType, string> = {
-  qr_shared: "#25476A",
-  teaching_shared: "#D8B56A",
-  visit_reported: "#7DAE92",
-  interested_reported: "#C77C8A",
-  faith_decision_reported: "#6E8FB5",
+  qr_shared: "#2F6DB0",
+  teaching_shared: "#E0A030",
+  visit_reported: "#7E62B3",
+  interested_reported: "#2E8A63",
+  faith_decision_reported: "#D0607E",
 };
 
 export interface ActivityInput {
