@@ -1,9 +1,9 @@
 export const navItems = [
   { href: "/", label: "Inicio" },
   { href: "/ensenanzas/", label: "Enseñanzas" },
-  { href: "/conociendo-a-jesus/", label: "Conociendo a Jesús" },
+  { href: "/conociendo-a-jesus/", label: "Conociendo a Jesús", short: "Conocer a Jesús" },
   { href: "/qr/", label: "Generar QR" },
-  { href: "/impacto/", label: "Impacto Evangelístico" },
+  { href: "/impacto/", label: "Impacto Evangelístico", short: "Impacto" },
   { href: "/metas/", label: "Metas" },
   { href: "/actividades/", label: "Actividades" },
   { href: "/acerca/", label: "Acerca" },

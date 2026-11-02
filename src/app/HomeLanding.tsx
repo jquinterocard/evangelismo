@@ -25,7 +25,7 @@ export function HomeLanding() {
             <p className="rounded-full bg-white/80 px-4 py-1.5 text-sm font-bold text-gold-ink shadow-sm">{appConfig.tagline}</p>
             <h1 className="text-4xl leading-[1.1] font-semibold sm:text-5xl lg:text-6xl">{appConfig.name}</h1>
             <p className="max-w-xl font-serif text-xl text-navy sm:text-2xl">{appConfig.heroSubtitle}</p>
-            <div className="mt-2 flex w-full flex-col gap-3 sm:w-auto sm:flex-row">
+            <div className="mt-2 flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:justify-center md:justify-start [&>a]:sm:whitespace-nowrap">
               <LinkButton href="/ensenanza/" size="lg" variant="gold" icon={<BookOpen className="size-5" aria-hidden />}>
                 Recibir una enseñanza
               </LinkButton>

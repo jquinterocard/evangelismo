@@ -59,7 +59,7 @@ export function Header() {
           <span className="truncate font-serif text-base font-semibold text-navy-ink sm:text-lg">{appConfig.name}</span>
         </Link>
 
-        <nav aria-label="Principal" className="ml-auto hidden lg:block">
+        <nav aria-label="Principal" className="ml-auto hidden xl:block">
           <ul className="flex items-center gap-1">
             {navItems.map((item) => {
               const active = isActive(pathname, item.href);
@@ -68,11 +68,12 @@ export function Header() {
                   <Link
                     href={item.href}
                     aria-current={active ? "page" : undefined}
-                    className={`rounded-full px-3 py-2 text-[0.95rem] font-semibold transition-colors ${
+                    title={"short" in item ? item.label : undefined}
+                    className={`rounded-full px-2.5 py-2 text-[0.95rem] font-semibold whitespace-nowrap transition-colors ${
                       active ? "bg-sky text-navy-ink" : "text-muted hover:bg-sky-soft hover:text-navy-ink"
                     }`}
                   >
-                    {item.label}
+                    {"short" in item ? item.short : item.label}
                   </Link>
                 </li>
               );
@@ -80,7 +81,7 @@ export function Header() {
           </ul>
         </nav>
 
-        <div className="ml-auto flex items-center gap-1 lg:hidden">
+        <div className="ml-auto flex items-center gap-1 xl:hidden">
           <Link href="/ensenanza/" className="grid size-11 place-items-center rounded-full text-navy hover:bg-sky-soft" aria-label="Recibir una enseñanza">
             <BookOpen className="size-5" aria-hidden />
           </Link>
@@ -108,7 +109,7 @@ export function Header() {
         <div
           id="menu-movil"
           ref={panelRef}
-          className="fixed inset-x-0 top-16 bottom-0 z-40 overflow-y-auto border-t border-line bg-cream lg:hidden"
+          className="fixed inset-x-0 top-16 bottom-0 z-40 overflow-y-auto border-t border-line bg-cream xl:hidden"
         >
           <nav aria-label="Menú móvil" className="container-page py-4">
             <ul className="flex flex-col gap-1">
