@@ -15,6 +15,7 @@ import {
 import { Table2, BarChart3 } from "lucide-react";
 import { formatShortDate } from "@/lib/dates";
 import { fmt } from "./projections";
+import { useTheme } from "@/lib/theme";
 
 export interface Series {
   key: string;
@@ -23,8 +24,15 @@ export interface Series {
   dashed?: boolean;
 }
 
-const AXIS = { stroke: "#8A96A3", fontSize: 12 };
-const GRID = "#ECE9E1";
+const CHART_COLORS = {
+  light: { axis: "#6B7785", grid: "#ECE9E1", surface: "#FFFFFF", cursor: "rgba(37,71,106,0.06)", target: "#8A96A3" },
+  dark: { axis: "#8FA0B3", grid: "#26364A", surface: "#152232", cursor: "rgba(156,196,236,0.08)", target: "#8FA0B3" },
+} as const;
+
+function useChartColors() {
+  const c = CHART_COLORS[useTheme()];
+  return { ...c, tick: { fill: c.axis, fontSize: 12 } };
+}
 
 interface TooltipLike {
   active?: boolean;
@@ -35,7 +43,7 @@ interface TooltipLike {
 function ChartTooltip({ active, payload, label, series, labelFormat }: TooltipLike & { series: Series[]; labelFormat?: (l: string) => string }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-xl border border-line bg-white px-3 py-2 text-sm shadow-[var(--shadow-soft)]">
+    <div className="rounded-xl border border-line bg-surface px-3 py-2 text-sm shadow-[var(--shadow-soft)]">
       <p className="mb-1 font-bold text-navy-ink">{labelFormat ? labelFormat(String(label)) : String(label)}</p>
       <ul className="flex flex-col gap-0.5">
         {payload
@@ -177,22 +185,23 @@ export function StackedBars({
   layout?: "horizontal" | "vertical";
 }) {
   const vertical = layout === "vertical";
+  const c = useChartColors();
   return (
     <ResponsiveContainer width="100%" height="100%">
       <BarChart data={rows} layout={layout} margin={{ top: 4, right: 8, bottom: 0, left: vertical ? 8 : 0 }} barCategoryGap="22%">
-        <CartesianGrid stroke={GRID} vertical={vertical} horizontal={!vertical} />
+        <CartesianGrid stroke={c.grid} vertical={vertical} horizontal={!vertical} />
         {vertical ? (
           <>
-            <XAxis type="number" allowDecimals={false} tick={AXIS} axisLine={false} tickLine={false} />
-            <YAxis type="category" dataKey={xKey} width={130} tick={AXIS} axisLine={false} tickLine={false} tickFormatter={xFormat} />
+            <XAxis type="number" allowDecimals={false} tick={c.tick} axisLine={false} tickLine={false} />
+            <YAxis type="category" dataKey={xKey} width={130} tick={c.tick} axisLine={false} tickLine={false} tickFormatter={xFormat} />
           </>
         ) : (
           <>
-            <XAxis dataKey={xKey} tick={AXIS} axisLine={false} tickLine={false} tickFormatter={xFormat} minTickGap={12} />
-            <YAxis allowDecimals={false} tick={AXIS} axisLine={false} tickLine={false} width={44} />
+            <XAxis dataKey={xKey} tick={c.tick} axisLine={false} tickLine={false} tickFormatter={xFormat} minTickGap={12} />
+            <YAxis allowDecimals={false} tick={c.tick} axisLine={false} tickLine={false} width={44} />
           </>
         )}
-        <Tooltip cursor={{ fill: "rgba(37,71,106,0.06)" }} content={(p) => <ChartTooltip active={p.active} payload={p.payload} label={p.label} series={series} labelFormat={xFormat} />} />
+        <Tooltip cursor={{ fill: c.cursor }} content={(p) => <ChartTooltip active={p.active} payload={p.payload} label={p.label} series={series} labelFormat={xFormat} />} />
         {series.map((s, i) => (
           <Bar
             key={s.key}
@@ -200,7 +209,7 @@ export function StackedBars({
             name={s.label}
             stackId={stacked ? "a" : undefined}
             fill={s.color}
-            stroke="#fff"
+            stroke={c.surface}
             strokeWidth={stacked ? 1 : 0}
             radius={stacked ? (i === series.length - 1 ? (vertical ? [0, 4, 4, 0] : [4, 4, 0, 0]) : 0) : vertical ? [0, 4, 4, 0] : [4, 4, 0, 0]}
             maxBarSize={36}
@@ -223,14 +232,15 @@ export function TrendLines({
   xKey: string;
   target?: number;
 }) {
+  const c = useChartColors();
   const withTarget = target ? rows.map((r) => ({ ...r, __target: target })) : rows;
-  const all: Series[] = target ? [...series, { key: "__target", label: "Meta", color: "#8A96A3", dashed: true }] : series;
+  const all: Series[] = target ? [...series, { key: "__target", label: "Meta", color: c.target, dashed: true }] : series;
   return (
     <ResponsiveContainer width="100%" height="100%">
       <LineChart data={withTarget} margin={{ top: 4, right: 12, bottom: 0, left: 0 }}>
-        <CartesianGrid stroke={GRID} vertical={false} />
-        <XAxis dataKey={xKey} tick={AXIS} axisLine={false} tickLine={false} tickFormatter={formatShortDate} minTickGap={16} />
-        <YAxis allowDecimals={false} tick={AXIS} axisLine={false} tickLine={false} width={44} />
+        <CartesianGrid stroke={c.grid} vertical={false} />
+        <XAxis dataKey={xKey} tick={c.tick} axisLine={false} tickLine={false} tickFormatter={formatShortDate} minTickGap={16} />
+        <YAxis allowDecimals={false} tick={c.tick} axisLine={false} tickLine={false} width={44} />
         <Tooltip content={(p) => <ChartTooltip active={p.active} payload={p.payload} label={p.label} series={all} labelFormat={formatShortDate} />} />
         {all.map((s) => (
           <Line
@@ -241,7 +251,7 @@ export function TrendLines({
             strokeWidth={2}
             strokeDasharray={s.dashed ? "6 5" : undefined}
             dot={false}
-            activeDot={{ r: 5, stroke: "#fff", strokeWidth: 2 }}
+            activeDot={{ r: 5, stroke: c.surface, strokeWidth: 2 }}
             connectNulls={false}
             isAnimationActive={false}
           />

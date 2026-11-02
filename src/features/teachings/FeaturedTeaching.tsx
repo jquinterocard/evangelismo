@@ -18,7 +18,7 @@ export function FeaturedTeaching() {
   if (hydrated && !teaching) setTeaching(pickRandomTeaching(teachingRepository.active(), [], cryptoRng));
 
   if (!teaching) {
-    return <div className="card min-h-72 animate-pulse bg-white/70" aria-hidden />;
+    return <div className="card min-h-72 animate-pulse bg-surface/70" aria-hidden />;
   }
   const category = getCategory(teaching.category);
   return (

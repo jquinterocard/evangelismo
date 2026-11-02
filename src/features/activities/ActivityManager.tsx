@@ -86,7 +86,7 @@ export function ActivityManager() {
         {hydrated && all.length > 0 && (
           <div className="flex flex-wrap items-center gap-2" aria-live="polite">
             {ACTIVITY_TYPES.filter((t) => totals[t] > 0).map((t) => (
-              <span key={t} className="inline-flex items-center gap-2 rounded-full border border-line bg-white px-3 py-1 text-sm">
+              <span key={t} className="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1 text-sm">
                 <span className="size-2.5 rounded-full" style={{ background: ACTIVITY_COLORS[t] }} aria-hidden />
                 {ACTIVITY_LABELS[t]}: <strong className="tabular-nums">{fmt.int(totals[t])}</strong>
               </span>

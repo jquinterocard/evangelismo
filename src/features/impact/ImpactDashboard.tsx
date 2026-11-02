@@ -189,7 +189,7 @@ export function ImpactDashboard() {
             description="Total acumulado de actividades. La línea punteada es una estimación según tu promedio diario."
             series={[
               { key: "real", label: "Registrado", color: "#2F6DB0" },
-              { key: "proyeccion", label: "Proyección (estimación)", color: "#E0A030", dashed: true },
+              { key: "proyeccion", label: "Proyección (estimación)", color: "#C2861F", dashed: true },
             ]}
             rows={trendRows}
             labelKey="date"
@@ -201,7 +201,7 @@ export function ImpactDashboard() {
               xKey="date"
               series={[
                 { key: "real", label: "Registrado", color: "#2F6DB0" },
-                { key: "proyeccion", label: "Proyección (estimación)", color: "#E0A030", dashed: true },
+                { key: "proyeccion", label: "Proyección (estimación)", color: "#C2861F", dashed: true },
               ]}
             />
           </ChartCard>
@@ -218,7 +218,7 @@ export function ImpactDashboard() {
                       type="button"
                       aria-pressed={compare === k}
                       onClick={() => setCompare(k)}
-                      className={`min-h-9 rounded-full px-3 text-xs font-bold ${compare === k ? "bg-navy text-white" : "border border-line bg-white text-navy"}`}
+                      className={`min-h-9 rounded-full px-3 text-xs font-bold ${compare === k ? "bg-navy text-white" : "border border-line bg-surface text-navy"}`}
                     >
                       {k === "week" ? "Semanal" : "Mensual"}
                     </button>
@@ -284,7 +284,7 @@ export function ImpactDashboard() {
       )}
 
 
-      <aside className="rounded-2xl border border-line bg-white p-5 text-sm text-muted">
+      <aside className="rounded-2xl border border-line bg-surface p-5 text-sm text-muted">
         <p className="flex items-center gap-2 font-bold text-navy-ink">
           <BookCheck className="size-4" aria-hidden /> Sobre estos indicadores
         </p>
@@ -302,7 +302,7 @@ export function ImpactDashboard() {
 
 function MiniStat({ icon, label, value }: { icon: React.ReactNode; label: string; value: number }) {
   return (
-    <div className="flex items-center gap-3 rounded-2xl border border-line bg-white px-4 py-3">
+    <div className="flex items-center gap-3 rounded-2xl border border-line bg-surface px-4 py-3">
       <span className="text-navy">{icon}</span>
       <span className="flex-1 text-sm text-muted">{label}</span>
       <span className="font-serif text-xl font-semibold text-navy-ink tabular-nums">{fmt.int(value)}</span>

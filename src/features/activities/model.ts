@@ -23,7 +23,7 @@ export const ACTIVITY_HINTS: Record<ActivityType, string> = {
 /** Paleta categórica validada (orden fijo; CVD con apoyo de leyenda y tabla). */
 export const ACTIVITY_COLORS: Record<ActivityType, string> = {
   qr_shared: "#2F6DB0",
-  teaching_shared: "#E0A030",
+  teaching_shared: "#C2861F",
   visit_reported: "#7E62B3",
   interested_reported: "#2E8A63",
   faith_decision_reported: "#D0607E",

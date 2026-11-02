@@ -14,6 +14,10 @@ import { Footer } from "@/components/layout/Footer";
 import { ToastProvider } from "@/components/ui/Toast";
 import { ServiceWorkerRegister } from "@/components/layout/ServiceWorkerRegister";
 import { contentSecurityPolicy } from "@/lib/csp";
+import { themePreloadScript } from "@/lib/theme-script";
+import { BottomNav } from "@/components/layout/BottomNav";
+import { MobileMenuPanel, MobileMenuProvider } from "@/components/layout/MobileMenu";
+import { WhatsAppFab } from "@/components/WhatsAppFab";
 
 export const metadata: Metadata = {
   metadataBase: appConfig.siteUrl ? new URL(`${appConfig.siteUrl}/`) : undefined,
@@ -54,15 +58,24 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         {process.env.NODE_ENV === "production" && <meta httpEquiv="Content-Security-Policy" content={contentSecurityPolicy()} />}
         <meta name="referrer" content="strict-origin-when-cross-origin" />
       </head>
-      <body className="flex min-h-full flex-col">
+      <body className="flex min-h-full flex-col pb-[calc(4.5rem+env(safe-area-inset-bottom))] xl:pb-0">
         <ToastProvider>
-          <Header />
-          <main id="contenido" className="flex-1">
-            {children}
-          </main>
-          <Footer />
+          <MobileMenuProvider>
+            <Header />
+            <main id="contenido" className="flex-1">
+              {children}
+            </main>
+            <Footer />
+            <WhatsAppFab />
+            <MobileMenuPanel />
+            <BottomNav />
+          </MobileMenuProvider>
         </ToastProvider>
         <ServiceWorkerRegister />
+        {/* Aplica el modo noche/claro antes de pintar, para evitar destellos. */}
+        <Script id="theme-preload" strategy="beforeInteractive">
+          {themePreloadScript}
+        </Script>
         {/* Evita mostrar la portada un instante a quien llega desde un QR (antes de hidratar). */}
         <Script id="qr-preload" strategy="beforeInteractive">
           {`try{if(/[?&]qr=/.test(location.search))document.documentElement.classList.add("from-qr")}catch(e){}`}

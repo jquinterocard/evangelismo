@@ -1,11 +1,13 @@
 import {
-  Anchor, BookOpen, Compass, Cross, Feather, Flame, Footprints, Gift, HandHeart, HandHelping, Heart,
+  Anchor, BookOpen, Compass, Feather, Flame, Footprints, Gift, HandHeart, HandHelping, Heart,
   HeartHandshake, Infinity as InfinityIcon, MessageCircleHeart, Sparkles, Sprout, Sunrise, Undo2, Users, Wand2,
-  type LucideIcon,
 } from "lucide-react";
+import type { ComponentType } from "react";
+import { LatinCrossIcon } from "./LatinCrossIcon";
 
-const icons: Record<string, LucideIcon> = {
-  Anchor, BookOpen, Compass, Cross, Feather, Flame, Footprints, Gift, HandHeart, HandHelping, Heart,
+const icons: Record<string, ComponentType<{ className?: string }>> = {
+  Cross: LatinCrossIcon,
+  Anchor, BookOpen, Compass, Feather, Flame, Footprints, Gift, HandHeart, HandHelping, Heart,
   HeartHandshake, Infinity: InfinityIcon, MessageCircleHeart, Sparkles, Sprout, Sunrise, Undo2, Users, Wand2,
 };
 

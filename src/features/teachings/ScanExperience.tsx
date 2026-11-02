@@ -55,7 +55,7 @@ export function ScanExperience({ qrId, invalidQr = false }: { qrId: string | nul
             Hoy queremos compartir contigo una palabra de esperanza
           </p>
           {invalidQr && (
-            <p className="flex items-center gap-2 rounded-full bg-white/80 px-4 py-1.5 text-sm text-muted">
+            <p className="flex items-center gap-2 rounded-full bg-surface/80 px-4 py-1.5 text-sm text-muted">
               <Info className="size-4" aria-hidden /> El código no es válido, pero esta enseñanza también es para ti.
             </p>
           )}
@@ -91,7 +91,7 @@ export function ScanExperience({ qrId, invalidQr = false }: { qrId: string | nul
               <Link
                 key={c.id}
                 href={`/ensenanzas/?categoria=${c.id}`}
-                className="rounded-full border border-line bg-white px-4 py-2 text-sm font-bold text-navy hover:border-navy"
+                className="rounded-full border border-line bg-surface px-4 py-2 text-sm font-bold text-navy hover:border-navy"
               >
                 {c.name}
               </Link>

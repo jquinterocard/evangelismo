@@ -19,10 +19,10 @@ export function HomeLanding() {
     <>
       {/* Hero */}
       <section className="sky-gradient relative overflow-hidden">
-        <LightRays className="pointer-events-none absolute -top-40 left-1/2 w-[56rem] max-w-none -translate-x-1/2 opacity-70 motion-safe:animate-glow" />
+        <LightRays className="hero-rays pointer-events-none absolute -top-40 left-1/2 w-[56rem] max-w-none -translate-x-1/2 opacity-70 motion-safe:animate-glow" />
         <div className="container-page relative grid items-center gap-8 pt-10 pb-14 sm:pt-16 md:grid-cols-[1.1fr_0.9fr] md:pb-20">
           <div className="flex flex-col items-center gap-5 text-center md:items-start md:text-left">
-            <p className="rounded-full bg-white/80 px-4 py-1.5 text-sm font-bold text-gold-ink shadow-sm">{appConfig.tagline}</p>
+            <p className="rounded-full bg-surface/80 px-4 py-1.5 text-sm font-bold text-gold-ink shadow-sm">{appConfig.tagline}</p>
             <h1 className="text-4xl leading-[1.1] font-semibold sm:text-5xl lg:text-6xl">{appConfig.name}</h1>
             <p className="max-w-xl font-serif text-xl text-navy sm:text-2xl">{appConfig.heroSubtitle}</p>
             <div className="mt-2 flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:flex-wrap sm:justify-center md:justify-start [&>a]:sm:whitespace-nowrap">
@@ -68,7 +68,7 @@ export function HomeLanding() {
       </section>
 
       {/* Categorías */}
-      <section className="bg-white/60 py-16" aria-labelledby="categorias">
+      <section className="bg-surface/60 py-16" aria-labelledby="categorias">
         <div className="container-page">
           <SectionHeading
             eyebrow="Enseñanzas"
@@ -82,7 +82,7 @@ export function HomeLanding() {
                   href={`/ensenanzas/?categoria=${c.id}`}
                   className="group card flex h-full flex-col gap-2 p-4 transition hover:-translate-y-0.5 hover:border-gold"
                 >
-                  <span className="grid size-10 place-items-center rounded-xl bg-gold-soft text-gold-ink transition group-hover:bg-gold group-hover:text-navy-ink">
+                  <span className="grid size-10 place-items-center rounded-xl bg-gold-soft text-gold-ink transition group-hover:bg-gold group-hover:text-[#14283e]">
                     <CategoryIcon name={c.icon} className="size-5" />
                   </span>
                   <span className="font-bold leading-snug text-navy-ink">{c.name}</span>
@@ -111,7 +111,7 @@ export function HomeLanding() {
           <h2 id="participa" className="mt-3 text-3xl font-semibold text-white">
             Comparte esperanza con quienes amas
           </h2>
-          <p className="mx-auto mt-3 max-w-2xl text-sky">
+          <p className="mx-auto mt-3 max-w-2xl text-[#dceeff]">
             Envía una enseñanza a tu familia, a tus amigos o a alguien que la necesite hoy. Imprime códigos QR y déjalos donde
             puedan iluminar el día de otra persona.
           </p>

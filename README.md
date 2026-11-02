@@ -41,6 +41,9 @@ cualquier hosting estático.
   registra en un solo paso la finalización y la respuesta. Hay una sola respuesta por finalización,
   garantizada en la base de datos. Ver [docs/SUPABASE.md](docs/SUPABASE.md).
 - **Exportar CSV** de actividades desde `/actividades`, protegido contra inyección de fórmulas.
+- **Navegación móvil** con barra inferior (Inicio · Enseñanzas · Conocer a Jesús · QR · Más) y panel «Más».
+- **Modo noche** activable/desactivable (sigue al sistema si no se ha elegido; se recuerda en el navegador).
+- **Compartir por WhatsApp**: botón flotante en las páginas generales y botón propio en cada enseñanza.
 - **PWA** instalable (manifest, íconos y service worker sencillo) y diseño mobile-first accesible:
   teclado, lectores de pantalla y `prefers-reduced-motion`.
 

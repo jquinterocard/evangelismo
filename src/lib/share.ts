@@ -38,3 +38,9 @@ export async function shareOrCopy(data: { title: string; text: string; url: stri
   }
   return (await copyText(data.url)) ? "copied" : "failed";
 }
+
+/** Enlace para compartir por WhatsApp (abre la app o WhatsApp Web). */
+export function whatsappShareUrl(text: string, url: string): string {
+  const message = [text.trim(), url.trim()].filter(Boolean).join(" ");
+  return `https://wa.me/?text=${encodeURIComponent(message)}`;
+}

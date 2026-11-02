@@ -50,7 +50,7 @@ export function GoalManager() {
               type="button"
               aria-pressed={filter === k}
               onClick={() => setFilter(k)}
-              className={`min-h-11 rounded-full px-4 text-sm font-bold ${filter === k ? "bg-navy text-white" : "border border-line bg-white text-navy"}`}
+              className={`min-h-11 rounded-full px-4 text-sm font-bold ${filter === k ? "bg-navy text-white" : "border border-line bg-surface text-navy"}`}
             >
               {label}
             </button>

@@ -43,7 +43,7 @@ export function PositiveFollowUp({ currentCategory, onAnother }: { currentCatego
             <li key={c.id}>
               <Link
                 href={`/ensenanzas/?categoria=${c.id}`}
-                className="flex min-h-12 items-center justify-center rounded-xl border border-line bg-white px-3 text-sm font-bold text-navy hover:border-navy"
+                className="flex min-h-12 items-center justify-center rounded-xl border border-line bg-surface px-3 text-sm font-bold text-navy hover:border-navy"
               >
                 {c.name}
               </Link>

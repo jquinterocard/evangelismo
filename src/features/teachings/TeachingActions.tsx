@@ -7,7 +7,8 @@ import { Button, buttonClass } from "@/components/ui/Button";
 import { useToast } from "@/components/ui/Toast";
 import { usePublicBase } from "@/hooks/usePublicBase";
 import { buildTeachingUrl } from "@/lib/urls";
-import { copyText, shareOrCopy } from "@/lib/share";
+import { copyText, shareOrCopy, whatsappShareUrl } from "@/lib/share";
+import { WhatsAppIcon } from "@/components/WhatsAppIcon";
 import { appConfig } from "@/lib/config";
 
 export function TeachingActions({ teaching, onAnother }: { teaching: Teaching; onAnother?: () => void }) {
@@ -30,8 +31,19 @@ export function TeachingActions({ teaching, onAnother }: { teaching: Teaching; o
     toast(ok ? "Enlace copiado." : "No se pudo copiar el enlace.", ok ? "success" : "error");
   }
 
+  const whatsapp = whatsappShareUrl(`Una palabra de esperanza: «${teaching.title}» (${teaching.reference}).`, url);
+
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+      <a
+        href={whatsapp}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex min-h-14 items-center justify-center gap-2 rounded-full bg-[#1f8f4c] px-7 text-lg font-bold text-white shadow-[var(--shadow-soft)] transition hover:bg-[#187a40] active:scale-[0.98] motion-safe:hover:-translate-y-0.5 sm:col-span-2"
+      >
+        <WhatsAppIcon className="size-6" /> Compartir por WhatsApp
+        <span className="sr-only">(se abre WhatsApp)</span>
+      </a>
       {onAnother ? (
         <Button size="lg" variant="gold" onClick={onAnother} icon={<RefreshCw className="size-5" aria-hidden />}>
           Descubrir otra enseñanza

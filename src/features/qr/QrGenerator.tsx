@@ -127,7 +127,7 @@ export function QrGenerator() {
         <h2 id={`${uid}-prev`} className="self-start text-xl font-semibold">
           Vista previa
         </h2>
-        <div className="w-full max-w-[22rem] rounded-2xl border border-line bg-white p-3">
+        <div className="w-full max-w-[22rem] rounded-2xl border border-line bg-[#fff] p-3">
           {preview ? (
             /* eslint-disable-next-line @next/next/no-img-element */
             <img src={svgToDataUrl(preview)} alt={`Código QR que abre ${current?.url}`} className="aspect-square w-full" />
@@ -181,7 +181,7 @@ export function QrGenerator() {
                 <label
                   key={t.id}
                   className={`flex min-h-14 cursor-pointer flex-col justify-center rounded-xl border px-3 py-2 text-sm transition has-[:focus-visible]:outline-3 has-[:focus-visible]:outline-gold ${
-                    prefs.qrTemplate === t.id ? "border-navy bg-sky-soft" : "border-line bg-white hover:border-navy/40"
+                    prefs.qrTemplate === t.id ? "border-navy bg-sky-soft" : "border-line bg-surface hover:border-navy/40"
                   }`}
                 >
                   <input

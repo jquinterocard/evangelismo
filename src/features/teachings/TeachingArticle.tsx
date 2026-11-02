@@ -6,7 +6,7 @@ import { appConfig } from "@/lib/config";
 import { Illustration } from "@/components/illustrations";
 
 function Block({ icon, title, children, tone = "plain" }: { icon: ReactNode; title: string; children: ReactNode; tone?: "plain" | "hope" | "rose" }) {
-  const bg = tone === "hope" ? "bg-hope-soft/70 border-hope/40" : tone === "rose" ? "bg-rose/35 border-rose" : "bg-white border-line";
+  const bg = tone === "hope" ? "bg-hope-soft/70 border-hope/40" : tone === "rose" ? "bg-rose/35 border-rose" : "bg-surface border-line";
   return (
     <section className={`rounded-2xl border p-5 sm:p-6 ${bg}`}>
       <h3 className="mb-2 flex items-center gap-2 text-lg font-semibold">
@@ -27,7 +27,7 @@ export function TeachingArticle({ teaching, headingLevel = "h1" }: { teaching: T
     <article className="flex flex-col gap-5" aria-labelledby={`t-${teaching.id}`}>
       <div className="relative overflow-hidden rounded-3xl border border-line bg-gradient-to-b from-sky to-cream px-5 pt-6 pb-7 text-center sm:px-10">
         <Illustration name={teaching.illustration ?? category.illustration} className="mx-auto h-28 w-auto motion-safe:animate-float sm:h-36" />
-        <p className="mt-4 inline-flex rounded-full bg-white/80 px-3 py-1 text-sm font-bold text-navy">{category.name}</p>
+        <p className="mt-4 inline-flex rounded-full bg-surface/80 px-3 py-1 text-sm font-bold text-navy">{category.name}</p>
         <H id={`t-${teaching.id}`} className="mt-3 text-3xl leading-tight font-semibold sm:text-4xl">
           {teaching.title}
         </H>

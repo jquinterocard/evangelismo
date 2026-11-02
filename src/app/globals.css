@@ -18,6 +18,7 @@
   --color-ink: #1f2a37;
   --color-muted: #4f5d6b;
   --color-line: #e6e3da;
+  --color-surface: #ffffff;
 
   --font-serif: "Lora", ui-serif, Georgia, "Times New Roman", serif;
   --font-sans: "Nunito Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -85,7 +86,7 @@
     .container-page { padding-inline: 1.5rem; }
   }
   .card {
-    background: #fff;
+    background: var(--color-surface);
     border: 1px solid var(--color-line);
     border-radius: 1.25rem;
     box-shadow: var(--shadow-soft);
@@ -95,7 +96,7 @@
     min-height: 2.875rem;
     border-radius: 0.75rem;
     border: 1px solid #cfd6de;
-    background: #fff;
+    background: var(--color-surface);
     padding: 0.55rem 0.8rem;
     color: var(--color-ink);
   }
@@ -120,6 +121,53 @@
   .prose-teaching p + p {
     margin-top: 0.75rem;
   }
+}
+
+/* ---------------- Modo noche ---------------- */
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-cream: #0e1824;
+  --color-surface: #152232;
+  --color-sky: #1b2c40;
+  --color-sky-soft: #172638;
+  --color-line: #2b3b4e;
+  --color-ink: #e6edf5;
+  --color-muted: #aab7c5;
+  --color-navy: #2f5d8a;
+  --color-navy-deep: #264d73;
+  --color-navy-ink: #f2f6fb;
+  --color-gold-soft: #3a3120;
+  --color-gold-ink: #e6c788;
+  --color-hope-soft: #1b3328;
+  --color-hope-ink: #93d3ad;
+  --color-rose: #3e2329;
+  --color-rose-ink: #f2a8b3;
+  --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.3), 0 8px 24px -8px rgb(0 0 0 / 0.5);
+}
+/* Los rayos claros del inicio se atenúan en la noche para no velar el fondo. */
+:root[data-theme="dark"] .hero-rays {
+  opacity: 0.18;
+}
+/* «navy» hace de fondo de botones; como texto o borde sobre fondo oscuro necesita más luz. */
+:root[data-theme="dark"] .text-navy,
+:root[data-theme="dark"] .hover\:text-navy:hover {
+  color: #9cc4ec;
+}
+:root[data-theme="dark"] .border-navy,
+:root[data-theme="dark"] .hover\:border-navy:hover {
+  border-color: #9cc4ec;
+}
+:root[data-theme="dark"] [class*="border-navy/"] {
+  border-color: rgb(156 196 236 / 0.35);
+}
+:root[data-theme="dark"] .field {
+  border-color: #3a4c61;
+}
+:root[data-theme="dark"] .sky-gradient {
+  background:
+    radial-gradient(1200px 500px at 50% -10%, rgb(216 181 106 / 0.12), transparent 60%),
+    radial-gradient(800px 400px at 85% 10%, rgb(244 214 214 / 0.06), transparent 60%),
+    linear-gradient(180deg, #172a40 0%, var(--color-cream) 85%);
 }
 
 @media (prefers-reduced-motion: reduce) {
