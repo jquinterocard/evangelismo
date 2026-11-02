@@ -1,5 +1,4 @@
 /** Limpieza de texto libre introducido por el usuario. React escapa al renderizar; aquí normalizamos. */
-// eslint-disable-next-line no-control-regex
 const CONTROL_CHARS = /[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g;
 
 export function cleanText(value: string, maxLength: number): string {
