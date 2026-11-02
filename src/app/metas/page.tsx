@@ -13,7 +13,6 @@ export default function GoalsPage() {
       <PageHeader
         eyebrow="Metas"
         title="Metas evangelísticas"
-        description="Un propósito claro ayuda a perseverar. Las proyecciones son estimaciones basadas en lo que registras."
         illustration="path"
       />
       <div className="container-page flex flex-col gap-6 py-10">
