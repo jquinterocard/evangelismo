@@ -38,28 +38,18 @@ export function GlobalImpact({ goals }: { goals: Goal[] }) {
   const qrHistory = useStore(qrHistoryStore);
   const globalGoals = goals.filter((g) => isGlobalMetric(g.metric) && g.endDate >= today);
 
-  const header = (
-    <div className="flex flex-wrap items-end justify-between gap-3">
-      <div>
-        <h2 id="global" className="text-2xl font-semibold">
-          Lo que hacen los visitantes
-        </h2>
-        <p className="max-w-2xl text-sm text-muted">
-          Se actualiza solo: enseñanzas que los visitantes marcaron voluntaria y anónimamente como completadas al escanear un QR, y sus
-          respuestas opcionales. No son personas únicas ni conversiones.
-        </p>
-      </div>
-      {daily.status !== "not_configured" && (
+  const header =
+    daily.status !== "not_configured" ? (
+      <div className="flex justify-end">
         <Button variant="ghost" size="sm" onClick={() => setRefresh((r) => r + 1)} icon={<RefreshCw className="size-4" aria-hidden />}>
           Actualizar
         </Button>
-      )}
-    </div>
-  );
+      </div>
+    ) : null;
 
   if (daily.status === "not_configured") {
     return (
-      <section aria-labelledby="global" className="flex flex-col gap-4">
+      <section aria-label="Estadísticas globales de finalizaciones" className="flex flex-col gap-4">
         {header}
         <div className="card flex items-start gap-4 p-6">
           <CloudOff className="size-8 shrink-0 text-muted" aria-hidden />
@@ -77,7 +67,7 @@ export function GlobalImpact({ goals }: { goals: Goal[] }) {
 
   if (daily.status === "loading") {
     return (
-      <section aria-labelledby="global" className="flex flex-col gap-4" aria-busy="true">
+      <section aria-label="Estadísticas globales de finalizaciones" className="flex flex-col gap-4" aria-busy="true">
         {header}
         <div className="card h-48 animate-pulse" />
       </section>
@@ -86,7 +76,7 @@ export function GlobalImpact({ goals }: { goals: Goal[] }) {
 
   if (daily.status === "error") {
     return (
-      <section aria-labelledby="global" className="flex flex-col gap-4">
+      <section aria-label="Estadísticas globales de finalizaciones" className="flex flex-col gap-4">
         {header}
         <p role="alert" className="card p-5 text-rose-ink">
           No se pudieron cargar las estadísticas globales. Revisa tu conexión e inténtalo de nuevo.
@@ -115,7 +105,7 @@ export function GlobalImpact({ goals }: { goals: Goal[] }) {
   const hasData = totals.completions > 0;
 
   return (
-    <section aria-labelledby="global" className="flex flex-col gap-4">
+    <section aria-label="Estadísticas globales de finalizaciones" className="flex flex-col gap-4">
       {header}
       <p className="text-sm text-muted">
         Período: {formatShortDate(from)} – {formatShortDate(today)} (últimos 6 meses).

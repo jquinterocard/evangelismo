@@ -36,11 +36,11 @@ cualquier hosting estático.
 - **Impacto Evangelístico** (`/impacto`): tarjetas, gráficas Recharts (actividad diaria, tendencia
   y proyección de cierre, comparación semanal/mensual, distribución, progreso de metas) con vista
   de tabla accesible, y una sección global de finalizaciones y respuestas.
-- **Finalización + interés voluntario** (opcional, Supabase): «He completado esta enseñanza» → «❤️
-  ¿Te gustaría seguir conociendo a Jesús?» con Sí / Por ahora no / Omitir. Hay una sola respuesta por
-  finalización, garantizada en la base de datos. Ver [docs/SUPABASE.md](docs/SUPABASE.md).
-- **Respaldo**: exporta e importa JSON (validado y versionado, en modo fusionar o reemplazar) y
-  exporta CSV de actividades y metas, protegido contra inyección de fórmulas.
+- **Finalización + interés voluntario** (opcional, Supabase): al final de cada enseñanza, «❤️ ¿Te
+  gustaría seguir conociendo a Jesús?» con tres botones: Sí / Por ahora no / Omitir. Tocar cualquiera
+  registra en un solo paso la finalización y la respuesta. Hay una sola respuesta por finalización,
+  garantizada en la base de datos. Ver [docs/SUPABASE.md](docs/SUPABASE.md).
+- **Exportar CSV** de actividades desde `/actividades`, protegido contra inyección de fórmulas.
 - **PWA** instalable (manifest, íconos y service worker sencillo) y diseño mobile-first accesible:
   teclado, lectores de pantalla y `prefers-reduced-motion`.
 
@@ -121,7 +121,7 @@ src/components/          UI base, layout (Header/Footer/SW) e ilustraciones SVG 
 src/data/                categorías, enseñanzas (teachings/group-*.ts) y ruta de aprendizaje
 src/features/teachings/  repositorio del catálogo, selección aleatoria, vista y experiencia de escaneo
 src/features/qr/         render SVG/PNG, tarjetas, ZIP, historial, configuración de URL
-src/features/completions/cliente Supabase (RPC), panel «He completado», hooks de estadísticas
+src/features/completions/cliente Supabase (RPC), panel de la pregunta de interés, hooks de estadísticas
 src/features/interest/   pregunta voluntaria y seguimiento positivo/negativo
 src/features/activities/ modelo, formulario y gestor de actividades
 src/features/goals/      modelo, formulario, tarjetas y gestor de metas
@@ -151,7 +151,7 @@ publicar** usando [docs/REVISION-CITAS.md](docs/REVISION-CITAS.md).
 
 - Las citas NVI se escribieron sin cotejar contra una edición impresa: requieren revisión humana.
 - Metas, actividades y preferencias viven solo en el navegador: no se sincronizan entre dispositivos y
-  se pierden si se borran los datos del sitio (usa la exportación JSON).
+  se pierden si se borran los datos del sitio.
 - Abrir una URL de QR no es un escaneo verificado, y no hay estadísticas globales de visitas: solo de
   finalizaciones voluntarias, si Supabase está configurado.
 - El registro global se probó con la migración real sobre PostgreSQL embebido (PGlite) y un simulador

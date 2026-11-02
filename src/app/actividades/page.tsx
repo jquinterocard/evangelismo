@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { BackupPanel } from "@/components/BackupPanel";
 import { ActivityManager } from "@/features/activities/ActivityManager";
 
 export const metadata: Metadata = {
@@ -18,7 +17,6 @@ export default function ActivitiesPage() {
       />
       <div className="container-page flex flex-col gap-6 py-10">
         <ActivityManager />
-        <BackupPanel />
       </div>
     </>
   );

@@ -14,7 +14,7 @@ export default function PrivacyPage() {
             <li>No pedimos nombre, correo, teléfono ni ningún dato personal para leer.</li>
             <li>No usamos cookies de seguimiento ni herramientas de analítica.</li>
             <li>
-              Si el sitio tiene activado el registro global, el botón «He completado esta enseñanza» y la pregunta opcional guardan solo: el
+              Si el sitio tiene activado el registro global, la pregunta opcional al final de cada enseñanza guarda solo: el
               identificador de la enseñanza, el identificador del código QR (si llegaste por uno), la fecha, tu respuesta voluntaria y un
               identificador aleatorio de sesión que se borra al cerrar la pestaña. No guardamos direcciones IP ni creamos perfiles.
             </li>
@@ -25,7 +25,7 @@ export default function PrivacyPage() {
           <h2 className="text-xl font-semibold">Para quien comparte</h2>
           <ul className="mt-2 list-inside list-disc space-y-1">
             <li>Metas, actividades, preferencias e historial de QR se guardan solo en el almacenamiento local de tu navegador.</li>
-            <li>No se sincronizan entre dispositivos. Usa la exportación JSON para respaldarlos.</li>
+            <li>No se sincronizan entre dispositivos.</li>
             <li>Por favor, no registres nombres, teléfonos ni información sensible de otras personas.</li>
           </ul>
         </section>

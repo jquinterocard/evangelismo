@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { BackupPanel } from "@/components/BackupPanel";
 import { ImpactDashboard } from "@/features/impact/ImpactDashboard";
 
 export const metadata: Metadata = {
@@ -18,7 +17,6 @@ export default function ImpactPage() {
       />
       <div className="container-page flex flex-col gap-8 py-10">
         <ImpactDashboard />
-        <BackupPanel />
       </div>
     </>
   );

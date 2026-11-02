@@ -148,7 +148,7 @@ export function createStore<T>(
         return {
           ok: false,
           error: "quota",
-          message: "El almacenamiento del navegador está lleno. Exporta un respaldo y elimina registros antiguos.",
+          message: "El almacenamiento del navegador está lleno. Elimina registros antiguos para liberar espacio.",
         };
       }
       return { ok: false, error: "unavailable", message: "No se pudo guardar en este navegador." };

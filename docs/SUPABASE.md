@@ -1,9 +1,16 @@
 # Registro global de finalizaciones e interés (Supabase)
 
 El registro global es **opcional**. Sin él, la aplicación sigue mostrando enseñanzas, generando QR
-y guardando metas y actividades en el navegador. El botón «He completado esta enseñanza» aparece
-deshabilitado con un mensaje claro, y el dashboard indica que las estadísticas globales no están
-disponibles.
+y guardando metas y actividades en el navegador. La pregunta final sigue mostrándose, pero con un
+mensaje claro de que la respuesta no se guarda, y el dashboard indica que las estadísticas globales
+no están disponibles.
+
+## Flujo para el visitante
+
+Al final de cada enseñanza aparece «❤️ ¿Te gustaría seguir conociendo a Jesús?» con tres botones del
+mismo tamaño: **Sí, quiero aprender más**, **Por ahora no, gracias** y **Omitir**. Tocar cualquiera
+llama, en un solo paso, a `register_completion` y después a `register_interest`. Si ya existía una
+respuesta para esa finalización, se respeta la primera.
 
 ## Qué se guarda (y qué no)
 
@@ -70,8 +77,8 @@ Function que emita un token firmado de corta duración, y aplicar límites por t
    - **GitHub Pages:** *Settings → Secrets and variables → Actions → Variables* con los mismos
      nombres (son públicas, por eso van como *variables*, no como *secrets*), y vuelve a ejecutar el
      workflow.
-6. Abre el sitio, lee una enseñanza y pulsa «He completado esta enseñanza». El resultado debe
-   aparecer en `/impacto` → *Finalizaciones registradas (global)*.
+6. Abre el sitio, lee una enseñanza y elige una de las tres opciones de la pregunta final. El
+   resultado debe aparecer en `/impacto`, en las tarjetas de finalizaciones y respuestas.
 
 ### Límites del plan gratuito (revisa la página de precios vigente)
 
