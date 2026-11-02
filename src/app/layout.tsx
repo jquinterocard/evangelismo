@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from "next";
+import Script from "next/script";
 import "@fontsource/lora/latin-500.css";
 import "@fontsource/lora/latin-600.css";
 import "@fontsource/lora/latin-500-italic.css";
@@ -48,7 +49,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="es" className="h-full antialiased">
+    <html lang="es" className="h-full antialiased" suppressHydrationWarning>
       <head>
         {process.env.NODE_ENV === "production" && <meta httpEquiv="Content-Security-Policy" content={contentSecurityPolicy()} />}
         <meta name="referrer" content="strict-origin-when-cross-origin" />
@@ -62,6 +63,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           <Footer />
         </ToastProvider>
         <ServiceWorkerRegister />
+        {/* Evita mostrar la portada un instante a quien llega desde un QR (antes de hidratar). */}
+        <Script id="qr-preload" strategy="beforeInteractive">
+          {`try{if(/[?&]qr=/.test(location.search))document.documentElement.classList.add("from-qr")}catch(e){}`}
+        </Script>
       </body>
     </html>
   );

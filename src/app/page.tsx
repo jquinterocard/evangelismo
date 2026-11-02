@@ -2,13 +2,9 @@ import { Suspense } from "react";
 import { HomeLanding } from "./HomeLanding";
 import { HomeSwitch } from "./HomeSwitch";
 
-// Evita mostrar la portada un instante a quien llega desde un QR (antes de hidratar).
-const qrPreload = `try{if(/[?&]qr=/.test(location.search))document.documentElement.classList.add("from-qr")}catch(e){}`;
-
 export default function HomePage() {
   return (
     <>
-      <script dangerouslySetInnerHTML={{ __html: qrPreload }} />
       <Suspense
         fallback={
           <>
