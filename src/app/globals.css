@@ -135,3 +135,7 @@
   header, footer, nav, .no-print { display: none !important; }
   body { background: #fff; }
 }
+
+/* Llegada desde un QR: oculta la portada estática hasta que hidrate la experiencia de escaneo. */
+.from-qr .landing-static { display: none; }
+.from-qr .qr-loading { display: block; }

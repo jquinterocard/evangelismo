@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "node scripts/serve-out.mjs",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
     "verify:export": "node scripts/verify-export.mjs",
