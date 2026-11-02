@@ -42,11 +42,11 @@ export function GlobalImpact({ goals }: { goals: Goal[] }) {
     <div className="flex flex-wrap items-end justify-between gap-3">
       <div>
         <h2 id="global" className="text-2xl font-semibold">
-          Finalizaciones registradas (global)
+          Lo que hacen los visitantes
         </h2>
         <p className="max-w-2xl text-sm text-muted">
-          Enseñanzas que visitantes marcaron voluntaria y anónimamente como completadas, y sus respuestas opcionales. No son personas
-          únicas ni conversiones.
+          Se actualiza solo: enseñanzas que los visitantes marcaron voluntaria y anónimamente como completadas al escanear un QR, y sus
+          respuestas opcionales. No son personas únicas ni conversiones.
         </p>
       </div>
       {daily.status !== "not_configured" && (

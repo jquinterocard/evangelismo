@@ -92,13 +92,23 @@ export function ImpactDashboard() {
         <Sparkles className="mt-1 size-5 shrink-0 text-gold-ink" aria-hidden /> {message}
       </p>
 
+      {/* Primero lo que se actualiza solo: finalizaciones de los visitantes (Supabase). */}
+      <GlobalImpact goals={goals} />
+
       {/* Tarjetas principales (locales) */}
       <section aria-labelledby="locales" className="flex flex-col gap-4">
         <div>
           <h2 id="locales" className="text-2xl font-semibold">
-            Tus actividades registradas
+            Tus registros manuales
           </h2>
-          <p className="text-sm text-muted">Datos de este navegador · mes en curso ({formatShortDate(monthStart)} – {formatShortDate(monthEnd)}).</p>
+          <p className="text-sm text-muted">
+            Lo que anotas tú en{" "}
+            <Link href="/actividades/" className="font-bold text-navy underline">
+              Actividades
+            </Link>{" "}
+            (QR entregados, visitas, personas interesadas…). No se llena solo · datos de este navegador · mes en curso (
+            {formatShortDate(monthStart)} – {formatShortDate(monthEnd)}).
+          </p>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           <StatCard
@@ -273,7 +283,6 @@ export function ImpactDashboard() {
         </section>
       )}
 
-      <GlobalImpact goals={goals} />
 
       <aside className="rounded-2xl border border-line bg-white p-5 text-sm text-muted">
         <p className="flex items-center gap-2 font-bold text-navy-ink">
