@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { BookOpen, HeartHandshake, Lock, QrCode, Sprout } from "lucide-react";
+import { BookOpen, HeartHandshake, QrCode } from "lucide-react";
 import { appConfig } from "@/lib/config";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { LinkButton } from "@/components/ui/Button";
@@ -13,9 +13,7 @@ export const metadata: Metadata = {
 const items = [
   { icon: QrCode, title: "Un código, una enseñanza", text: "Cada QR tiene un identificador aleatorio. Al escanearlo se muestra una enseñanza bíblica distinta, elegida al azar en el propio celular." },
   { icon: BookOpen, title: "Contenido centrado en Jesús", text: `${teachingRepository.active().length} enseñanzas originales en 20 temas, con referencias bíblicas verificables, reflexión, aplicación práctica y oración sugerida.` },
-  { icon: Lock, title: "Privacidad primero", text: "No pedimos datos personales para leer. Las metas y actividades se guardan solo en tu navegador. El registro global de finalizaciones es anónimo y opcional." },
   { icon: HeartHandshake, title: "Sin competencias", text: "Los indicadores ayudan a perseverar y planificar, no miden el valor espiritual de nadie. Cada persona responde a Dios con libertad." },
-  { icon: Sprout, title: "Gratuito y abierto a crecer", text: "Funciona como sitio estático, sin servidores propios. Está preparado para incorporar en el futuro equipos, iglesias y un panel administrativo real." },
 ];
 
 export default function AboutPage() {
@@ -59,14 +57,6 @@ export default function AboutPage() {
               Ver enseñanzas
             </LinkButton>
           </div>
-        </section>
-        <section className="rounded-2xl border border-line bg-white p-5 text-sm text-muted">
-          <h2 className="mb-2 text-lg font-semibold">Texto bíblico</h2>
-          <p>{appConfig.bible.copyright}</p>
-          <p className="mt-2">
-            Las ilustraciones son originales del proyecto. Las reflexiones, explicaciones y oraciones son contenido original y no sustituyen la
-            lectura personal de las Escrituras ni el acompañamiento de una comunidad cristiana.
-          </p>
         </section>
       </div>
     </>
