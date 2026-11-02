@@ -13,7 +13,6 @@ export default function LearningPathPage() {
       <PageHeader
         eyebrow="Ruta de aprendizaje"
         title="Conociendo a Jesús"
-        description="Diez temas sencillos, con referencias bíblicas, reflexiones y actividades opcionales. No necesitas completarlos todos ni seguir un orden."
         illustration="path"
       />
       <div className="container-page py-10">
