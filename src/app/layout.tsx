@@ -21,10 +21,10 @@ export const metadata: Metadata = {
   },
   description: appConfig.description,
   applicationName: appConfig.name,
-  manifest: withBasePath("/manifest.webmanifest"),
   icons: {
     icon: [
       { url: withBasePath("/icons/icon.svg"), type: "image/svg+xml" },
+      { url: withBasePath("/favicon.png"), sizes: "48x48", type: "image/png" },
       { url: withBasePath("/icons/icon-192.png"), sizes: "192x192", type: "image/png" },
     ],
     apple: [{ url: withBasePath("/icons/apple-touch-icon.png"), sizes: "180x180" }],
