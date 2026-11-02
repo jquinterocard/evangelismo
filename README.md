@@ -21,7 +21,7 @@ cualquier hosting estático.
 - **Escaneo** (`/?qr=UUID`): valida el parámetro y elige al azar en el navegador, sin repetir las
   enseñanzas recientes de la sesión. Botones para otra enseñanza, compartir (Web Share API), copiar
   enlace y volver al inicio. No pide datos personales.
-- **Generador QR** (`/qr`): UUID v4, URL pública configurable, color, fondo, tamaño, margen y 5
+- **Generador QR** (`/qr`): UUID v4, URL pública tomada de la compilación, color, fondo, tamaño, margen y 5
   plantillas (cruz, corazón, paloma, Biblia, minimalista). Con emblema usa corrección H y el
   emblema ocupa ≤ 20 % del lado. Descarga PNG, SVG, tarjeta imprimible (PNG/SVG) y lotes ZIP de
   1–100 códigos con `manifest.csv`. Historial local.
@@ -73,7 +73,7 @@ Todo sale de `src/lib/config.ts` y de variables de entorno (ver `.env.example`):
 
 | Variable | Uso |
 |---|---|
-| `NEXT_PUBLIC_SITE_URL` | URL pública con la que se construyen los QR. Si está vacía, se usa la del navegador. También se puede cambiar desde `/qr`. |
+| `NEXT_PUBLIC_SITE_URL` | URL pública con la que se construyen los QR. Si está vacía (desarrollo local), se usa la del navegador. |
 | `NEXT_PUBLIC_BASE_PATH` | Subruta de publicación (`/nombre-repo` en GitHub Pages; vacía en Vercel o con dominio propio). |
 | `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Opcionales. Activan el registro global. **Nunca** uses la clave `service_role`. |
 

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/ui/PageHeader";
-import { PublicUrlSettings } from "@/features/qr/PublicUrlSettings";
 import { QrGenerator } from "@/features/qr/QrGenerator";
 
 export const metadata: Metadata = {
@@ -18,7 +17,6 @@ export default function QrPage() {
         illustration="cross"
       />
       <div className="container-page flex flex-col gap-6 py-10">
-        <PublicUrlSettings />
         <QrGenerator />
       </div>
     </>

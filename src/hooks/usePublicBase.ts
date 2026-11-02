@@ -1,12 +1,13 @@
 "use client";
 
-import { useStore, useHydrated } from "./useStore";
-import { preferencesStore } from "@/lib/stores";
+import { useHydrated } from "./useStore";
 import { resolvePublicBase } from "@/lib/urls";
 
-/** URL pública efectiva (preferencia del usuario > variable de build > ubicación actual). */
+/**
+ * URL pública efectiva: la configurada en la compilación (NEXT_PUBLIC_SITE_URL)
+ * o, si no existe (desarrollo local), la dirección actual del navegador + ruta base.
+ */
 export function usePublicBase(): string {
-  const prefs = useStore(preferencesStore);
   const hydrated = useHydrated();
-  return resolvePublicBase({ userUrl: prefs.publicUrl, origin: hydrated ? window.location.origin : "" });
+  return resolvePublicBase({ origin: hydrated ? window.location.origin : "" });
 }
