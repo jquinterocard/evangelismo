@@ -44,3 +44,10 @@ export function whatsappShareUrl(text: string, url: string): string {
   const message = [text.trim(), url.trim()].filter(Boolean).join(" ");
   return `https://wa.me/?text=${encodeURIComponent(message)}`;
 }
+
+/** Enlace para abrir un chat de WhatsApp con un número concreto y un mensaje ya escrito. */
+export function whatsappChatUrl(phone: string, text: string): string {
+  const digits = phone.replace(/\D/g, "");
+  const msg = text.trim();
+  return `https://wa.me/${digits}${msg ? `?text=${encodeURIComponent(msg)}` : ""}`;
+}

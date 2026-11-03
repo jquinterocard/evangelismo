@@ -12,9 +12,15 @@ import { PGlite } from "@electric-sql/pglite";
 const port = Number(process.env.SUPABASE_LOCAL_PORT) || 54321;
 const db = new PGlite();
 await db.exec("create role anon nologin; create role authenticated nologin;");
+// Equivalente mínimo de auth.jwt() de Supabase (aquí siempre vacío: no hay inicio de sesión local).
+await db.exec(`create schema auth;
+  create function auth.jwt() returns jsonb language sql stable as $$ select '{}'::jsonb $$;
+  grant usage on schema auth to anon, authenticated;`);
 await db.exec(readFileSync("supabase/migrations/0001_completions_and_interest.sql", "utf8"));
+await db.exec(readFileSync("supabase/migrations/0002_contact_requests.sql", "utf8"));
 await db.exec(readFileSync("supabase/seed_teachings.sql", "utf8"));
-const allowed = new Set(["register_completion", "register_interest", "impact_daily_stats", "top_completed_teachings"]);
+// El panel de mentores necesita Supabase Auth real; aquí solo se exponen las RPC del visitante.
+const allowed = new Set(["register_completion", "register_interest", "impact_daily_stats", "top_completed_teachings", "submit_contact_request"]);
 let queue = Promise.resolve();
 
 const cors = {

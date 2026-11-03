@@ -67,6 +67,7 @@ export function ScanExperience({ qrId, invalidQr = false }: { qrId: string | nul
             <CompletionPanel
               key={`c-${current.id}-${view}`}
               teachingId={current.id}
+              teachingTitle={current.title}
               qrId={qrId}
               category={current.category}
               onAnother={another}

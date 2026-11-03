@@ -42,7 +42,7 @@ export type StatsResult<T> = { ok: true; data: T } | { ok: false; reason: "not_c
 const RESPONSES: InterestResponse[] = ["positive", "negative", "skipped"];
 const TEACHING_ID_RE = /^[a-z0-9-]{1,80}$/;
 
-function firstRow(data: unknown): Record<string, unknown> | null {
+export function firstRow(data: unknown): Record<string, unknown> | null {
   if (Array.isArray(data)) return (data[0] as Record<string, unknown>) ?? null;
   if (data && typeof data === "object") return data as Record<string, unknown>;
   return null;

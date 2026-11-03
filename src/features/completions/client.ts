@@ -34,7 +34,10 @@ function lazyRpc(): RpcFn {
   };
 }
 
-export const completionsApi: CompletionsApi = createCompletionsApi(isSupabaseConfigured() ? lazyRpc() : null);
+/** RPC anónimo compartido (un solo cliente de Supabase); null si no hay registro global. */
+export const anonRpc: RpcFn | null = isSupabaseConfigured() ? lazyRpc() : null;
+
+export const completionsApi: CompletionsApi = createCompletionsApi(anonRpc);
 
 const SESSION_KEY = "uecj:session-id";
 

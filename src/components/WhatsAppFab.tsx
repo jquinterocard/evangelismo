@@ -13,7 +13,9 @@ function Fab() {
   const base = usePublicBase();
   // Donde se muestra una enseñanza ya hay un botón «Compartir por WhatsApp» propio.
   const onTeaching = params?.has("qr") || pathname.startsWith("/ensenanza/") || /^\/ensenanzas\/[^/]+\/?$/.test(pathname);
-  if (onTeaching || !base) return null;
+  // El panel privado de mentores no se comparte.
+  const privatePage = pathname.startsWith("/seguimiento");
+  if (onTeaching || privatePage || !base) return null;
   const url = `${base}${pathname === "/" ? "/" : pathname}`;
   const href = whatsappShareUrl(`Te comparto «${appConfig.name}»: un mensaje de esperanza para ti.`, url);
   return (

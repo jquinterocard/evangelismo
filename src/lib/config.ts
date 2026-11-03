@@ -21,6 +21,12 @@ function normalizeSiteUrl(value: string | undefined): string {
   }
 }
 
+/** Número de WhatsApp en formato internacional, solo dígitos (8–15); vacío si no es válido. */
+function normalizePhone(value: string | undefined): string {
+  const digits = (value ?? "").replace(/\D/g, "");
+  return /^\d{8,15}$/.test(digits) ? digits : "";
+}
+
 export const appConfig = {
   name: "Un Encuentro con Jesús",
   shortName: "Encuentro",
@@ -55,13 +61,17 @@ export const appConfig = {
       "Facilitar la difusión del evangelio de Jesucristo mediante códigos QR que llevan a enseñanzas bíblicas breves, y acompañar con responsabilidad las actividades evangelísticas.",
     values: ["Centrado en Jesucristo", "Respeto a cada persona", "Privacidad", "Gratuito"],
   },
+  /** Contacto para acompañar a quien quiere saber más (vacío = no se muestra). */
+  contact: {
+    whatsapp: normalizePhone(process.env.NEXT_PUBLIC_CONTACT_WHATSAPP),
+  },
   supabase: {
     url: (process.env.NEXT_PUBLIC_SUPABASE_URL ?? "").trim(),
     anonKey: (process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "").trim(),
   },
 } as const;
 
-export const internal = { normalizeBasePath, normalizeSiteUrl };
+export const internal = { normalizeBasePath, normalizeSiteUrl, normalizePhone };
 
 /** Antepone la ruta base a una ruta interna (para recursos fuera de next/link, p. ej. manifest o sw). */
 export function withBasePath(path: string, basePath: string = appConfig.basePath): string {

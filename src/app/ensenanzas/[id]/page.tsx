@@ -32,7 +32,7 @@ export default async function TeachingPage({ params }: PageProps<"/ensenanzas/[i
         </Link>
         <div className="flex flex-col gap-6">
           <TeachingArticle teaching={teaching} />
-          <CompletionPanel teachingId={teaching.id} qrId={null} category={teaching.category} />
+          <CompletionPanel teachingId={teaching.id} teachingTitle={teaching.title} qrId={null} category={teaching.category} />
           <TeachingActions teaching={teaching} />
         </div>
       </div>

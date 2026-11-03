@@ -80,6 +80,57 @@ Function que emita un token firmado de corta duración, y aplicar límites por t
 6. Abre el sitio, lee una enseñanza y elige una de las tres opciones de la pregunta final. El
    resultado debe aparecer en `/impacto`, en las tarjetas de finalizaciones y respuestas.
 
+## Seguimiento: solicitudes de contacto y panel de mentores (migración 0002)
+
+Tras responder **«Sí»**, la persona ve el bloque «¿Quieres hablar con alguien?» con:
+
+- **Escribir por WhatsApp**: abre un chat con el número del equipo y un mensaje ya escrito que
+  incluye la enseñanza que leyó. Se activa con la variable `NEXT_PUBLIC_CONTACT_WHATSAPP` (en GitHub
+  Pages, la variable de repositorio `CONTACT_WHATSAPP`), solo dígitos con indicativo, p. ej.
+  `573001234567`. Sin ella el botón no aparece. No usa la base de datos.
+- **Prefiero que me contacten**: formulario voluntario (nombre, WhatsApp, correo opcional, forma de
+  contacto preferida, petición de oración opcional) con **autorización expresa** de tratamiento de
+  datos (Ley 1581 de 2012). Solo aparece si Supabase está configurado y la respuesta «Sí» quedó
+  registrada.
+
+| Tabla | Contenido |
+|---|---|
+| `mentors` | `email` (en minúsculas), `name`, `active`. La llena el administrador. |
+| `contact_requests` | Datos del formulario, `teaching_id`, `consent_at`/`consent_version`, `status` (`nuevo`, `contactado`, `acompanamiento`, `cerrado`), `notes`, `updated_at`/`updated_by`. |
+
+Seguridad:
+
+- Igual que 0001: RLS forzado sin políticas y privilegios revocados; solo RPC `SECURITY DEFINER`.
+- `submit_contact_request` (anon) exige la autorización, una finalización aceptada de la **misma
+  sesión**, de menos de 24 h y con respuesta «Sí». Admite una solicitud por finalización y un máximo
+  global de 60 por hora.
+- `mentor_list_requests`, `mentor_update_request` y `mentor_delete_request` solo se pueden ejecutar
+  con sesión (`authenticated`) y además verifican que el correo del JWT esté activo en `mentors`.
+
+### Activarlo
+
+1. **SQL Editor → New query**: pega `supabase/migrations/0002_contact_requests.sql` y pulsa **Run**.
+2. **Authentication → Sign In / Providers**: deja activo *Email* y **desactiva «Allow new users to
+   sign up»** (solo entran usuarios invitados).
+3. **Authentication → URL Configuration**: en *Site URL* y *Redirect URLs* agrega
+   `https://jquinterocard.github.io/evangelismo/seguimiento/` (y `http://localhost:3000/seguimiento/`
+   para desarrollo).
+4. **Authentication → Users → Invite user** con el correo de cada mentor.
+5. Autorízalo en **SQL Editor**:
+
+   ```sql
+   insert into public.mentors (email, name) values ('mentor@ejemplo.com', 'Nombre del mentor');
+   -- Para quitar el acceso: update public.mentors set active = false where email = 'mentor@ejemplo.com';
+   ```
+
+6. El mentor abre `/seguimiento/` (la página no aparece en el menú ni en buscadores), escribe su
+   correo, abre el enlace que recibe y ve las solicitudes. Puede abrir WhatsApp con un saludo, cambiar
+   el estado, escribir notas y **eliminar** una solicitud cuando la persona lo pida (derecho de
+   supresión).
+
+> Supabase envía los correos de acceso con un servicio de prueba limitado a pocos mensajes por hora.
+> Si tienes varios mentores, configura un SMTP propio en **Authentication → Emails → SMTP Settings**.
+
 ### Límites del plan gratuito (revisa la página de precios vigente)
 
 - Base de datos de 500 MB y 2 proyectos activos.
@@ -95,6 +146,9 @@ npm run supabase:local     # PostgreSQL embebido (PGlite) con la migración real
 NEXT_PUBLIC_SUPABASE_URL=http://localhost:54321 NEXT_PUBLIC_SUPABASE_ANON_KEY=local npm run dev
 ```
 
-El simulador expone solo los endpoints RPC, guarda todo en memoria y no sirve para producción.
+El simulador expone solo los endpoints RPC del visitante (también `submit_contact_request`; el panel
+de mentores necesita Supabase Auth real), guarda todo en memoria y no sirve para producción.
 La prueba automatizada `src/features/completions/supabase-sql.test.ts` ejecuta la misma migración y
 comprueba RLS, idempotencia, respuesta única por finalización, sesiones ajenas y límites de tasa.
+`src/features/followup/followup-sql.test.ts` hace lo mismo con la 0002: autorización obligatoria,
+solo tras un «Sí», una solicitud por finalización y acceso exclusivo de mentores activos.

@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { NegativeFollowUp, PositiveFollowUp, SkippedFollowUp } from "@/features/interest/InterestPrompt";
 import type { CompletionsApi, InterestResponse } from "./api";
 import { completionsApi, getSessionId } from "./client";
+import type { FollowupApi } from "@/features/followup/api";
 
 /** Segundos mínimos de lectura antes de habilitar las opciones (fricción ligera contra abuso). */
 export const MIN_READ_SECONDS = 12;
@@ -14,7 +15,7 @@ export const MIN_READ_SECONDS = 12;
 type State =
   | { kind: "asking"; error?: string }
   | { kind: "sending"; choice: InterestResponse }
-  | { kind: "answered"; choice: InterestResponse; recorded: boolean; note?: string }
+  | { kind: "answered"; choice: InterestResponse; recorded: boolean; note?: string; completionId?: string }
   | { kind: "limited" };
 
 /**
@@ -24,13 +25,19 @@ type State =
  */
 export function CompletionPanel({
   teachingId,
+  teachingTitle,
   qrId,
   category,
   onAnother,
   api = completionsApi,
   minReadSeconds = MIN_READ_SECONDS,
+  contactPhone,
+  followupApi,
 }: {
   teachingId: string;
+  teachingTitle?: string;
+  contactPhone?: string;
+  followupApi?: FollowupApi;
   qrId: string | null;
   category?: CategoryId;
   onAnother?: () => void;
@@ -79,12 +86,12 @@ export function CompletionPanel({
     }
     // Ya existía una respuesta para esta finalización: se respeta (una sola por finalización).
     if (completion.status === "duplicate" && completion.response) {
-      return setState({ kind: "answered", choice: completion.response, recorded: true });
+      return setState({ kind: "answered", choice: completion.response, recorded: true, completionId: completion.completionId });
     }
 
     const interest = await api.registerInterest({ completionId: completion.completionId, sessionId, response: choice });
     if (interest.status === "registered" || interest.status === "duplicate") {
-      return setState({ kind: "answered", choice: interest.response, recorded: true });
+      return setState({ kind: "answered", choice: interest.response, recorded: true, completionId: completion.completionId });
     }
     if (interest.status === "error") {
       // La finalización quedó guardada; reintentar es seguro (ambas operaciones son idempotentes).
@@ -102,7 +109,16 @@ export function CompletionPanel({
           {state.recorded && <p className="text-sm text-muted">Tu lectura y tu respuesta quedaron registradas de forma anónima.</p>}
         </div>
         <hr className="w-full border-line" />
-        {state.choice === "positive" && <PositiveFollowUp currentCategory={category} onAnother={onAnother} />}
+        {state.choice === "positive" && (
+          <PositiveFollowUp
+            currentCategory={category}
+            onAnother={onAnother}
+            teachingTitle={teachingTitle}
+            completionId={state.completionId ?? null}
+            contactPhone={contactPhone}
+            followupApi={followupApi}
+          />
+        )}
         {state.choice === "negative" && <NegativeFollowUp />}
         {state.choice === "skipped" && <SkippedFollowUp onAnother={onAnother} />}
         {!state.recorded && (
