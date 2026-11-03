@@ -99,15 +99,13 @@ begin
     return;
   end if;
 
-  -- IP del cliente: cf-connecting-ip la fija Cloudflare (delante de Supabase) y el cliente no la
-  -- controla. Respaldo: el ÚLTIMO valor de x-forwarded-for (el primero lo puede inventar el cliente).
+  -- IP del cliente: solo cf-connecting-ip, que Cloudflare (delante de Supabase) reescribe con la
+  -- dirección real; el cliente no puede falsificarla. x-forwarded-for NO se usa: su primer valor lo
+  -- inventa el cliente y el último puede ser un proxy compartido por todos (bloquearía a todos).
+  -- Sin una IP confiable no hay límite por conexión; quedan el límite por número y el tope global.
   begin
     v_headers := nullif(current_setting('request.headers', true), '')::json;
-    v_ip := btrim(coalesce(
-      nullif(v_headers ->> 'cf-connecting-ip', ''),
-      (regexp_split_to_array(coalesce(v_headers ->> 'x-forwarded-for', ''), '\s*,\s*'))[
-        cardinality(regexp_split_to_array(coalesce(v_headers ->> 'x-forwarded-for', ''), '\s*,\s*'))],
-      ''));
+    v_ip := btrim(coalesce(v_headers ->> 'cf-connecting-ip', ''));
   exception when others then
     v_ip := '';
   end;
