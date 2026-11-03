@@ -4,8 +4,8 @@
 
 Plataforma de evangelización digital con códigos QR: quien escanea un código recibe en su celular una enseñanza bíblica breve, elegida al azar, y puede decir de forma voluntaria y anónima si quiere seguir conociendo a Jesús.
 
-🌐 **Sitio en vivo:** https://jquinterocard.github.io/evangelizmo/
-💻 **Código:** https://github.com/jquinterocard/evangelizmo
+🌐 **Sitio en vivo:** https://jquinterocard.github.io/evangelismo/
+💻 **Código:** https://github.com/jquinterocard/evangelismo
 
 ---
 

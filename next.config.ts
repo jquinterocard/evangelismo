@@ -2,7 +2,7 @@ import type { NextConfig } from "next";
 
 /**
  * Sitio 100 % estático (output: 'export').
- * NEXT_PUBLIC_BASE_PATH permite publicar bajo una subruta, p. ej. "/evangelizmo" en GitHub Pages.
+ * NEXT_PUBLIC_BASE_PATH permite publicar bajo una subruta, p. ej. "/evangelismo" en GitHub Pages.
  */
 const rawBasePath = process.env.NEXT_PUBLIC_BASE_PATH?.trim() ?? "";
 const basePath =

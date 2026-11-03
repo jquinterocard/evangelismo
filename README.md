@@ -109,7 +109,7 @@ Revisa los límites vigentes en <https://vercel.com/pricing>.
 5. Haz push o ejecuta el workflow a mano (**Actions → Publicar en GitHub Pages → Run workflow**).
 
 Los QR quedan como `https://<usuario>.github.io/<repositorio>/?qr=<uuid>`. Esto se probó localmente
-con `NEXT_PUBLIC_BASE_PATH=/evangelizmo npm run build && npm start`.
+con `NEXT_PUBLIC_BASE_PATH=/evangelismo npm run build && npm start`.
 
 **Dominio propio futuro:** apúntalo a Vercel o a GitHub Pages, cambia `NEXT_PUBLIC_SITE_URL` (y
 `PAGES_BASE_PATH=/` en Pages) y vuelve a desplegar. Los QR ya impresos siguen apuntando a la URL

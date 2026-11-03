@@ -18,6 +18,8 @@ import { buildZip, cardPng, fileBase, qrPng, svgToDataUrl, type BatchFormat } fr
 import { createQrRecords, saveQrRecords } from "./history";
 
 const SIZES = [256, 512, 1024, 2048];
+// Botones de acción compactos en pantallas estrechas para que no se partan en dos líneas.
+const ACTION = "whitespace-nowrap px-3 text-sm sm:px-5 sm:text-base";
 
 function styleFrom(p: Preferences): QrStyle {
   return { color: p.qrColor, background: p.qrBackground, size: p.qrSize, margin: p.qrMargin, template: p.qrTemplate };
@@ -121,9 +123,9 @@ export function QrGenerator() {
   }
 
   return (
-    <div className="grid gap-6 lg:grid-cols-[1fr_1.1fr]">
+    <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
       {/* Vista previa */}
-      <section className="card flex flex-col items-center gap-4 p-5 sm:p-6 lg:sticky lg:top-20 lg:self-start" aria-labelledby={`${uid}-prev`}>
+      <section className="card flex min-w-0 flex-col items-center gap-4 p-5 sm:p-6 lg:sticky lg:top-20 lg:self-start" aria-labelledby={`${uid}-prev`}>
         <h2 id={`${uid}-prev`} className="self-start text-xl font-semibold">
           Vista previa
         </h2>
@@ -150,16 +152,16 @@ export function QrGenerator() {
           <Button onClick={generateOne} variant="gold" className="col-span-2" icon={<RefreshCw className="size-4" aria-hidden />}>
             Generar nuevo QR
           </Button>
-          <Button onClick={downloadPng} disabled={!current || busy} icon={<Download className="size-4" aria-hidden />}>
+          <Button className={ACTION} onClick={downloadPng} disabled={!current || busy} icon={<Download className="size-4" aria-hidden />}>
             PNG
           </Button>
-          <Button onClick={downloadCardPng} variant="secondary" disabled={!current || busy} icon={<IdCard className="size-4" aria-hidden />}>
+          <Button className={ACTION} onClick={downloadCardPng} variant="secondary" disabled={!current || busy} icon={<IdCard className="size-4" aria-hidden />}>
             Tarjeta PNG
           </Button>
-          <Button onClick={copyUrl} variant="ghost" disabled={!current} icon={<Copy className="size-4" aria-hidden />}>
+          <Button className={ACTION} onClick={copyUrl} variant="ghost" disabled={!current} icon={<Copy className="size-4" aria-hidden />}>
             Copiar URL
           </Button>
-          <Button onClick={share} variant="ghost" disabled={!current} icon={<Share2 className="size-4" aria-hidden />}>
+          <Button className={ACTION} onClick={share} variant="ghost" disabled={!current} icon={<Share2 className="size-4" aria-hidden />}>
             Compartir
           </Button>
         </div>
@@ -168,7 +170,7 @@ export function QrGenerator() {
         </p>
       </section>
 
-      <div className="flex flex-col gap-6">
+      <div className="flex min-w-0 flex-col gap-6">
         {/* Personalización */}
         <section className="card p-5 sm:p-6" aria-labelledby={`${uid}-style`}>
           <h2 id={`${uid}-style`} className="text-xl font-semibold">
@@ -223,6 +225,8 @@ export function QrGenerator() {
                 onChange={(e) => isHexColor(e.target.value) && setPref("qrBackground", e.target.value)}
               />
             </div>
+          </div>
+          <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label htmlFor={`${uid}-s`} className="label">
                 Tamaño (PNG)

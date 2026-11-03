@@ -7,7 +7,7 @@ const ID = "0f8fad5b-d9cb-469f-a165-70867728950e";
 describe("URLs públicas", () => {
   it("construye la URL del QR con y sin ruta base", () => {
     expect(buildQrUrl("https://mi-proyecto.vercel.app", ID)).toBe(`https://mi-proyecto.vercel.app/?qr=${ID}`);
-    expect(buildQrUrl("https://usuario.github.io/evangelizmo/", ID)).toBe(`https://usuario.github.io/evangelizmo/?qr=${ID}`);
+    expect(buildQrUrl("https://usuario.github.io/evangelismo/", ID)).toBe(`https://usuario.github.io/evangelismo/?qr=${ID}`);
     expect(() => buildQrUrl("https://x.app", "no-uuid")).toThrow();
   });
 
@@ -40,7 +40,7 @@ describe("URLs públicas", () => {
   });
 
   it("normaliza la ruta base (compatibilidad de rutas estáticas)", () => {
-    expect(internal.normalizeBasePath("evangelizmo/")).toBe("/evangelizmo");
+    expect(internal.normalizeBasePath("evangelismo/")).toBe("/evangelismo");
     expect(internal.normalizeBasePath("/")).toBe("");
     expect(internal.normalizeBasePath(undefined)).toBe("");
     expect(withBasePath("/sw.js", "/repo")).toBe("/repo/sw.js");
