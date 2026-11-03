@@ -16,12 +16,13 @@ const read = (p: string) => readFileSync(join(root, p), "utf8");
 let db: PGlite;
 
 /** Ejecuta una RPC como PostgREST: rol anon o authenticated (con el correo en el JWT). */
-function rpcAs(role: "anon" | "authenticated", email?: string): RpcFn {
+function rpcAs(role: "anon" | "authenticated", email?: string, ip?: string): RpcFn {
   return async (fn, args) => {
     const keys = Object.keys(args);
     const params = keys.map((k, i) => `${k} => $${i + 1}`).join(", ");
     try {
       await db.query(`select set_config('request.jwt.claims', $1, false)`, [email ? JSON.stringify({ email, role }) : ""]);
+      await db.query(`select set_config('request.headers', $1, false)`, [ip ? JSON.stringify({ "x-forwarded-for": `${ip}, 10.0.0.1` }) : ""]);
       await db.exec(`set role ${role};`);
       const res = await db.query(`select * from public.${fn}(${params})`, keys.map((k) => args[k]));
       return { data: res.rows, error: null };
@@ -71,6 +72,7 @@ beforeAll(async () => {
   `);
   await db.exec(read("supabase/migrations/0001_completions_and_interest.sql"));
   await db.exec(read("supabase/migrations/0002_contact_requests.sql"));
+  await db.exec(read("supabase/migrations/0003_contact_rate_limits.sql"));
   await db.exec(read("supabase/seed_teachings.sql"));
   await db.exec(`insert into public.mentors (email, name) values ('mentor@iglesia.org', 'Mentor')`);
 }, 60_000);
@@ -145,5 +147,37 @@ describe("migración 0002: solicitudes de contacto", () => {
     expect(await mentor.remove(r.id)).toEqual({ ok: true, data: "deleted" });
     const after = await mentor.list();
     expect(after.ok && after.data).toEqual([]);
+  });
+
+  it("no se puede agotar el cupo cambiando de sesión: límite por conexión y por número", async () => {
+    let n = 0;
+    const session = () => `66666666-6666-4666-8666-${String(++n).padStart(12, "0")}`;
+    const fromIp = createFollowupApi(rpcAs("anon", undefined, "203.0.113.7"));
+    const withPhone = (phone: string) => ({ ...valid, whatsapp: phone });
+
+    // Mismo número en 24 h: se trata como duplicado, sin crear otra fila.
+    const s1 = session();
+    expect((await fromIp.submit({ completionId: await positiveCompletion(s1), sessionId: s1, data: withPhone("573110000001") })).status).toBe("registered");
+    const s2 = session();
+    expect((await fromIp.submit({ completionId: await positiveCompletion(s2), sessionId: s2, data: withPhone("573110000001") })).status).toBe("duplicate");
+
+    // Misma conexión: máximo 3 por hora aunque cambien la sesión y el número.
+    const results: string[] = [];
+    for (const phone of ["573110000002", "573110000003", "573110000004"]) {
+      const s = session();
+      results.push((await fromIp.submit({ completionId: await positiveCompletion(s), sessionId: s, data: withPhone(phone) })).status);
+    }
+    expect(results).toEqual(["registered", "registered", "rate_limited"]);
+
+    // Otra conexión no queda bloqueada.
+    const other = createFollowupApi(rpcAs("anon", undefined, "198.51.100.9"));
+    const s3 = session();
+    expect((await other.submit({ completionId: await positiveCompletion(s3), sessionId: s3, data: withPhone("573110000005") })).status).toBe("registered");
+
+    // Solo se guarda un hash de la conexión, nunca la IP.
+    const keys = await db.query<{ client_key: string | null }>("select client_key from public.contact_requests");
+    expect(keys.rows.every((r) => r.client_key === null || /^[0-9a-f]{32}$/.test(r.client_key))).toBe(true);
+    const raw = await db.query("select 1 from public.contact_requests where client_key like '%203.0.113.7%'");
+    expect(raw.rows).toHaveLength(0);
   });
 });

@@ -18,6 +18,7 @@ await db.exec(`create schema auth;
   grant usage on schema auth to anon, authenticated;`);
 await db.exec(readFileSync("supabase/migrations/0001_completions_and_interest.sql", "utf8"));
 await db.exec(readFileSync("supabase/migrations/0002_contact_requests.sql", "utf8"));
+await db.exec(readFileSync("supabase/migrations/0003_contact_rate_limits.sql", "utf8"));
 await db.exec(readFileSync("supabase/seed_teachings.sql", "utf8"));
 // El panel de mentores necesita Supabase Auth real; aquí solo se exponen las RPC del visitante.
 const allowed = new Set(["register_completion", "register_interest", "impact_daily_stats", "top_completed_teachings", "submit_contact_request"]);

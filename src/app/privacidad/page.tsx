@@ -33,7 +33,8 @@ export default function PrivacyPage() {
           <ul className="mt-2 list-inside list-disc space-y-1">
             <li>
               <strong>Qué guardamos:</strong> tu nombre, tu número de WhatsApp, tu correo (si lo das), cómo prefieres que te contactemos,
-              tu petición de oración (si la escribes), la enseñanza que leíste y la fecha de tu autorización.
+              tu petición de oración (si la escribes), la enseñanza que leíste y la fecha de tu autorización. Para evitar abusos, durante 24
+              horas guardamos también un código cifrado derivado de tu conexión (no tu dirección IP), y luego se borra.
             </li>
             <li>
               <strong>Para qué:</strong> únicamente para contactarte, orar por ti y acompañarte si así lo deseas. No vendemos ni

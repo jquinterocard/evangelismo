@@ -102,14 +102,18 @@ Seguridad:
 
 - Igual que 0001: RLS forzado sin políticas y privilegios revocados; solo RPC `SECURITY DEFINER`.
 - `submit_contact_request` (anon) exige la autorización, una finalización aceptada de la **misma
-  sesión**, de menos de 24 h y con respuesta «Sí». Admite una solicitud por finalización y un máximo
-  global de 60 por hora.
+  sesión**, de menos de 24 h y con respuesta «Sí». Admite una solicitud por finalización.
+- Límites que no dependen de la sesión (migración **0003**): 3 solicitudes por hora por conexión,
+  1 cada 24 h por número de WhatsApp (las repeticiones se tratan como duplicado) y un tope global de
+  200 por hora como respaldo. De la conexión solo se guarda un hash (`client_key`) que se borra a
+  las 24 horas; nunca la IP.
 - `mentor_list_requests`, `mentor_update_request` y `mentor_delete_request` solo se pueden ejecutar
   con sesión (`authenticated`) y además verifican que el correo del JWT esté activo en `mentors`.
 
 ### Activarlo
 
 1. **SQL Editor → New query**: pega `supabase/migrations/0002_contact_requests.sql` y pulsa **Run**.
+   Después, en otra consulta, `supabase/migrations/0003_contact_rate_limits.sql`.
 2. **Authentication → Sign In / Providers**: deja activo *Email* y **desactiva «Allow new users to
    sign up»** (solo entran usuarios invitados).
 3. **Authentication → URL Configuration**: en *Site URL* y *Redirect URLs* agrega
@@ -151,4 +155,5 @@ de mentores necesita Supabase Auth real), guarda todo en memoria y no sirve para
 La prueba automatizada `src/features/completions/supabase-sql.test.ts` ejecuta la misma migración y
 comprueba RLS, idempotencia, respuesta única por finalización, sesiones ajenas y límites de tasa.
 `src/features/followup/followup-sql.test.ts` hace lo mismo con la 0002: autorización obligatoria,
-solo tras un «Sí», una solicitud por finalización y acceso exclusivo de mentores activos.
+solo tras un «Sí», una solicitud por finalización, límites por conexión y por número, y acceso
+exclusivo de mentores activos.
