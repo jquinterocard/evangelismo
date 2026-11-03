@@ -34,7 +34,8 @@ export default function PrivacyPage() {
             <li>
               <strong>Qué guardamos:</strong> tu nombre, tu número de WhatsApp, tu correo (si lo das), cómo prefieres que te contactemos,
               tu petición de oración (si la escribes), la enseñanza que leíste y la fecha de tu autorización. Para evitar abusos, durante 24
-              horas guardamos también un código cifrado derivado de tu conexión (no tu dirección IP), y luego se borra.
+              horas guardamos también un código derivado de tu conexión con una clave aleatoria que se descarta al día siguiente (no
+              guardamos tu dirección IP), y luego se borra.
             </li>
             <li>
               <strong>Para qué:</strong> únicamente para contactarte, orar por ti y acompañarte si así lo deseas. No vendemos ni

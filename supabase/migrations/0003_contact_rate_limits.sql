@@ -4,8 +4,9 @@
 -- El session_id lo elige el navegador, así que cambiarlo no debe permitir
 -- agotar el cupo global y bloquear a las personas reales. Se añaden límites
 -- que no dependen de la sesión:
---   * por conexión (IP): 3 por hora. Solo se guarda un hash de la IP y se
---     borra a las 24 horas.
+--   * por conexión (IP): 3 por hora. Solo se guarda un hash de la IP con una
+--     sal aleatoria diaria; la sal se descarta al día siguiente (el hash deja de
+--     poder relacionarse con una IP) y el hash se borra a las 24 horas.
 --   * por número de WhatsApp: 1 cada 24 horas (las repeticiones se tratan como
 --     «duplicado» y no generan otra fila).
 --   * tope global más alto (200/hora) solo como último respaldo.
@@ -13,6 +14,15 @@
 -- =====================================================================
 
 alter table public.contact_requests add column if not exists client_key text null;
+
+-- Sal aleatoria por día para el hash de la conexión (privada; se descarta a los 2 días).
+create table if not exists public.contact_rate_salts (
+  day  date primary key,
+  salt text not null
+);
+alter table public.contact_rate_salts enable row level security;
+alter table public.contact_rate_salts force row level security;
+revoke all on table public.contact_rate_salts from public, anon, authenticated;
 
 create index if not exists contact_requests_client_key_idx on public.contact_requests (client_key, created_at) where client_key is not null;
 create index if not exists contact_requests_whatsapp_idx on public.contact_requests (whatsapp, created_at);
@@ -41,6 +51,7 @@ declare
   v_headers  json;
   v_ip       text := '';
   v_key      text;
+  v_salt     text;
   v_teaching text;
   v_id       uuid;
   v_count    int;
@@ -81,22 +92,33 @@ begin
    where c.client_key is not null and c.created_at < now() - interval '24 hours';
 
   -- El mismo número ya pidió contacto en las últimas 24 horas: no se duplica.
-  select c.id into v_id from public.contact_requests c
-   where c.whatsapp = v_phone and c.created_at > now() - interval '24 hours'
-   order by c.created_at desc limit 1;
-  if v_id is not null then
-    return query select 'duplicate'::text, v_id;
+  -- (No se devuelve el id de esa otra solicitud.)
+  if exists (select 1 from public.contact_requests c
+             where c.whatsapp = v_phone and c.created_at > now() - interval '24 hours') then
+    return query select 'duplicate'::text, null::uuid;
     return;
   end if;
 
-  -- IP del cliente según PostgREST/Supabase (primer valor de x-forwarded-for).
+  -- IP del cliente: cf-connecting-ip la fija Cloudflare (delante de Supabase) y el cliente no la
+  -- controla. Respaldo: el ÚLTIMO valor de x-forwarded-for (el primero lo puede inventar el cliente).
   begin
     v_headers := nullif(current_setting('request.headers', true), '')::json;
-    v_ip := btrim(split_part(coalesce(v_headers ->> 'x-forwarded-for', v_headers ->> 'x-real-ip', ''), ',', 1));
+    v_ip := btrim(coalesce(
+      nullif(v_headers ->> 'cf-connecting-ip', ''),
+      (regexp_split_to_array(coalesce(v_headers ->> 'x-forwarded-for', ''), '\s*,\s*'))[
+        cardinality(regexp_split_to_array(coalesce(v_headers ->> 'x-forwarded-for', ''), '\s*,\s*'))],
+      ''));
   exception when others then
     v_ip := '';
   end;
-  v_key := case when v_ip <> '' then md5('uecj-contact:' || v_ip) end;
+
+  if v_ip <> '' then
+    delete from public.contact_rate_salts s where s.day < current_date - 1;
+    insert into public.contact_rate_salts (day, salt) values (current_date, gen_random_uuid()::text)
+    on conflict (day) do nothing;
+    select s.salt into v_salt from public.contact_rate_salts s where s.day = current_date;
+    v_key := md5(v_salt || ':' || v_ip);
+  end if;
 
   if v_key is not null then
     select count(*) into v_count from public.contact_requests c

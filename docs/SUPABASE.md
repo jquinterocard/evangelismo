@@ -105,8 +105,9 @@ Seguridad:
   sesión**, de menos de 24 h y con respuesta «Sí». Admite una solicitud por finalización.
 - Límites que no dependen de la sesión (migración **0003**): 3 solicitudes por hora por conexión,
   1 cada 24 h por número de WhatsApp (las repeticiones se tratan como duplicado) y un tope global de
-  200 por hora como respaldo. De la conexión solo se guarda un hash (`client_key`) que se borra a
-  las 24 horas; nunca la IP.
+  200 por hora como respaldo. La conexión se identifica con `cf-connecting-ip` (la fija
+  Cloudflare; el cliente no la controla) y solo se guarda un hash con sal aleatoria diaria
+  (`client_key`), que se borra a las 24 horas; la sal se descarta a los 2 días. Nunca se guarda la IP.
 - `mentor_list_requests`, `mentor_update_request` y `mentor_delete_request` solo se pueden ejecutar
   con sesión (`authenticated`) y además verifican que el correo del JWT esté activo en `mentors`.
 

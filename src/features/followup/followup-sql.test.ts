@@ -22,7 +22,7 @@ function rpcAs(role: "anon" | "authenticated", email?: string, ip?: string): Rpc
     const params = keys.map((k, i) => `${k} => $${i + 1}`).join(", ");
     try {
       await db.query(`select set_config('request.jwt.claims', $1, false)`, [email ? JSON.stringify({ email, role }) : ""]);
-      await db.query(`select set_config('request.headers', $1, false)`, [ip ? JSON.stringify({ "x-forwarded-for": `${ip}, 10.0.0.1` }) : ""]);
+      await db.query(`select set_config('request.headers', $1, false)`, [ip ? JSON.stringify({ "cf-connecting-ip": ip, "x-forwarded-for": "1.2.3.4" }) : ""]);
       await db.exec(`set role ${role};`);
       const res = await db.query(`select * from public.${fn}(${params})`, keys.map((k) => args[k]));
       return { data: res.rows, error: null };
@@ -169,15 +169,33 @@ describe("migración 0002: solicitudes de contacto", () => {
     }
     expect(results).toEqual(["registered", "registered", "rate_limited"]);
 
+    // Falsificar x-forwarded-for no sirve: se usa cf-connecting-ip.
+    const spoof: RpcFn = async (fn, args) => {
+      await db.query(`select set_config('request.headers', $1, false)`, [JSON.stringify({ "cf-connecting-ip": "203.0.113.7", "x-forwarded-for": "9.9.9.9" })]);
+      const keys = Object.keys(args);
+      await db.exec("set role anon;");
+      try {
+        const res = await db.query(`select * from public.${fn}(${keys.map((k, i) => `${k} => $${i + 1}`).join(", ")})`, keys.map((k) => args[k]));
+        return { data: res.rows, error: null };
+      } finally {
+        await db.exec("reset role;");
+      }
+    };
+    const s4 = session();
+    expect((await createFollowupApi(spoof).submit({ completionId: await positiveCompletion(s4), sessionId: s4, data: withPhone("573110000006") })).status).toBe("rate_limited");
+
     // Otra conexión no queda bloqueada.
     const other = createFollowupApi(rpcAs("anon", undefined, "198.51.100.9"));
     const s3 = session();
     expect((await other.submit({ completionId: await positiveCompletion(s3), sessionId: s3, data: withPhone("573110000005") })).status).toBe("registered");
 
-    // Solo se guarda un hash de la conexión, nunca la IP.
+    // Solo se guarda un hash con sal diaria, nunca la IP (ni un md5 directo de ella).
     const keys = await db.query<{ client_key: string | null }>("select client_key from public.contact_requests");
     expect(keys.rows.every((r) => r.client_key === null || /^[0-9a-f]{32}$/.test(r.client_key))).toBe(true);
-    const raw = await db.query("select 1 from public.contact_requests where client_key like '%203.0.113.7%'");
-    expect(raw.rows).toHaveLength(0);
+    const plain = await db.query("select 1 from public.contact_requests where client_key = md5('203.0.113.7') or client_key like '%203.0.113.7%'");
+    expect(plain.rows).toHaveLength(0);
+    await db.exec("set role anon;");
+    await expect(db.query("select * from public.contact_rate_salts")).rejects.toThrow();
+    await db.exec("reset role;");
   });
 });
