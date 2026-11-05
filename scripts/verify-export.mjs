@@ -56,8 +56,21 @@ for (const f of scan(join(out, "_next"))) {
   check(!/service_role/i.test(src), `Referencia a service_role en ${f}`);
 }
 
+// Narración (opcional): cada pista anunciada en el manifiesto debe existir.
+let audioTracks = 0;
+const audioManifest = join(out, "audio/manifest.json");
+if (existsSync(audioManifest)) {
+  const audio = JSON.parse(readFileSync(audioManifest, "utf8"));
+  for (const [id, byVoice] of Object.entries(audio.items ?? {}))
+    for (const [voice, sections] of Object.entries(byVoice))
+      for (const section of Object.keys(sections)) {
+        audioTracks++;
+        check(existsSync(join(out, "audio", voice, id, `${section}.mp3`)), `Falta el audio ${voice}/${id}/${section}.mp3`);
+      }
+}
+
 if (errors.length) {
   console.error("✗ Verificación de exportación fallida:\n- " + errors.join("\n- "));
   process.exit(1);
 }
-console.log(`✓ Exportación estática verificada (basePath="${basePath || "/"}", ${teachingDirs.length} enseñanzas, ${topicDirs.length} temas).`);
+console.log(`✓ Exportación estática verificada (basePath="${basePath || "/"}", ${teachingDirs.length} enseñanzas, ${topicDirs.length} temas, ${audioTracks ? `${audioTracks} pistas de audio` : "sin narración"}).`);

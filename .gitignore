@@ -42,3 +42,7 @@ next-env.d.ts
 
 !.env.example
 .playwright-cli/
+
+# narración generada (npm run gen:audio)
+/public/audio/
+/.venv-tts/

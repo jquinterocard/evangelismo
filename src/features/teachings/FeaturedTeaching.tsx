@@ -8,6 +8,8 @@ import { getCategory } from "@/data/categories";
 import { useHydrated } from "@/hooks/useStore";
 import { Illustration } from "@/components/illustrations";
 import { Button } from "@/components/ui/Button";
+import { ListenPanel } from "@/features/audio/ListenPanel";
+import { TEACHING_SECTIONS } from "@/features/audio/speech-text";
 import { teachingRepository } from "./repository";
 import { cryptoRng, pickRandomTeaching } from "./random";
 
@@ -34,6 +36,7 @@ export function FeaturedTeaching() {
           <Link href={`/ensenanzas/${teaching.id}/`} className="inline-flex min-h-12 items-center gap-2 font-bold text-navy underline underline-offset-4">
             Leer la enseñanza completa <ArrowRight className="size-4" aria-hidden />
           </Link>
+          <ListenPanel key={teaching.id} variant="compact" audioId={teaching.id} title={teaching.title} sections={TEACHING_SECTIONS} />
           <Button
             variant="ghost"
             size="md"

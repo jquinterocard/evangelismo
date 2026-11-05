@@ -6,6 +6,8 @@ import { learningPath } from "@/data/learning-path";
 import { appConfig } from "@/lib/config";
 import { Illustration } from "@/components/illustrations";
 import { MarkTopicRead } from "@/features/learning/LearningProgress";
+import { ListenPanel } from "@/features/audio/ListenPanel";
+import { TOPIC_SECTIONS, topicAudioId } from "@/features/audio/speech-text";
 
 export const dynamicParams = false;
 
@@ -43,7 +45,9 @@ export default async function TopicPage({ params }: PageProps<"/conociendo-a-jes
             <p className="mx-auto mt-3 max-w-xl text-lg text-muted">{topic.summary}</p>
           </header>
 
-          <section className="card flex flex-col gap-4 p-5 sm:p-6" aria-labelledby="refs">
+          <ListenPanel audioId={topicAudioId(topic.slug)} title={topic.title} sections={TOPIC_SECTIONS} />
+
+          <section id="listen-verse" className="scroll-mt-24 card flex flex-col gap-4 p-5 sm:p-6" aria-labelledby="refs">
             <h2 id="refs" className="text-xl font-semibold">
               Lo que dice la Biblia
             </h2>
@@ -65,7 +69,7 @@ export default async function TopicPage({ params }: PageProps<"/conociendo-a-jes
             </ul>
           </section>
 
-          <section className="card flex flex-col gap-3 p-5 sm:p-6" aria-labelledby="exp">
+          <section id="listen-explanation" className="scroll-mt-24 card flex flex-col gap-3 p-5 sm:p-6" aria-labelledby="exp">
             <h2 id="exp" className="text-xl font-semibold">
               Explicación
             </h2>
@@ -74,14 +78,14 @@ export default async function TopicPage({ params }: PageProps<"/conociendo-a-jes
             ))}
           </section>
 
-          <section className="rounded-2xl border border-rose bg-rose/35 p-5 sm:p-6" aria-labelledby="refl">
+          <section id="listen-reflection" className="scroll-mt-24 rounded-2xl border border-rose bg-rose/35 p-5 sm:p-6" aria-labelledby="refl">
             <h2 id="refl" className="mb-2 flex items-center gap-2 text-xl font-semibold">
               <Sparkles className="size-5 text-gold-ink" aria-hidden /> Reflexión
             </h2>
             <p>{topic.reflection}</p>
           </section>
 
-          <section className="rounded-2xl border border-hope/40 bg-hope-soft/70 p-5 sm:p-6" aria-labelledby="act">
+          <section id="listen-application" className="scroll-mt-24 rounded-2xl border border-hope/40 bg-hope-soft/70 p-5 sm:p-6" aria-labelledby="act">
             <h2 id="act" className="mb-2 flex items-center gap-2 text-xl font-semibold">
               <Lightbulb className="size-5 text-gold-ink" aria-hidden /> Actividad práctica <span className="text-base font-normal text-muted">(opcional)</span>
             </h2>

@@ -82,3 +82,14 @@ export const learningProgressSchema = z.object({
 export const activitiesSchema = z.array(activitySchema).max(LIMITS.maxActivities);
 export const goalsSchema = z.array(goalSchema).max(LIMITS.maxGoals);
 export const qrHistorySchema = z.array(qrRecordSchema).max(LIMITS.maxQrHistory);
+
+export const LISTEN_VOICES = ["f", "m"] as const;
+export const LISTEN_RATES = [0.75, 1, 1.25, 1.5] as const;
+export const LISTEN_SECTIONS = ["verse", "context", "explanation", "reflection", "application", "prayer"] as const;
+
+export const listenPreferencesSchema = z.object({
+  voice: z.enum(LISTEN_VOICES),
+  rate: z.union(LISTEN_RATES.map((r) => z.literal(r))),
+  sections: z.array(z.enum(LISTEN_SECTIONS)).min(1).max(LISTEN_SECTIONS.length),
+});
+export type ListenPreferences = z.infer<typeof listenPreferencesSchema>;

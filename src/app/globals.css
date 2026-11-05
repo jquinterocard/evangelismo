@@ -121,6 +121,12 @@
   .prose-teaching p + p {
     margin-top: 0.75rem;
   }
+  /* Sección que se está escuchando con el reproductor de voz. */
+  [data-listening="true"] {
+    outline: 3px solid var(--color-gold);
+    outline-offset: 3px;
+    transition: outline-color 0.3s ease;
+  }
 }
 
 /* ---------------- Modo noche ---------------- */

@@ -1,9 +1,11 @@
 /* Service worker de "Un Encuentro con Jesús".
  * - Recursos estáticos con hash (_next/static, íconos, fuentes): caché primero.
  * - Páginas HTML: red primero, con respaldo en caché si no hay conexión.
+ * - Índice de la narración (audio/manifest.json): red primero, con respaldo en caché.
+ * - Los MP3 de la narración no se interceptan (el navegador pide rangos de bytes).
  * - Nunca intercepta peticiones a otros orígenes (p. ej. Supabase).
  */
-const VERSION = "v1";
+const VERSION = "v2";
 const STATIC_CACHE = `uecj-static-${VERSION}`;
 const PAGE_CACHE = `uecj-pages-${VERSION}`;
 const SCOPE = new URL(self.registration.scope).pathname; // incluye la ruta base
@@ -46,6 +48,21 @@ self.addEventListener("fetch", (event) => {
             return res;
           }),
       ),
+    );
+    return;
+  }
+
+  if (url.pathname === `${SCOPE}audio/manifest.json`) {
+    event.respondWith(
+      fetch(req)
+        .then((res) => {
+          if (res.ok) {
+            const copy = res.clone();
+            caches.open(PAGE_CACHE).then((c) => c.put(url.origin + url.pathname, copy));
+          }
+          return res;
+        })
+        .catch(() => caches.match(url.origin + url.pathname).then((hit) => hit || Response.error())),
     );
     return;
   }

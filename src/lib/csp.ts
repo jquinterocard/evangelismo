@@ -15,6 +15,8 @@ export function contentSecurityPolicy(supabaseUrl: string = appConfig.supabase.u
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob:",
     "font-src 'self'",
+    // Narración pregenerada (public/audio).
+    "media-src 'self'",
     `connect-src 'self'${supabaseOrigin ? ` ${supabaseOrigin}` : ""}`,
     "manifest-src 'self'",
     "worker-src 'self'",

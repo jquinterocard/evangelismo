@@ -36,6 +36,22 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm test
+      # Narración con Piper TTS (open source). Se reutiliza lo ya generado si el texto no cambió.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: sudo apt-get update && sudo apt-get install -y --no-install-recommends ffmpeg
+      - run: pip install piper-tts==1.8.0
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/piper-voices
+            public/audio
+          key: audio-${{ hashFiles('src/data/**', 'src/features/audio/speech-text.ts', 'scripts/gen-audio.mjs', 'scripts/piper_batch.py') }}
+          restore-keys: audio-
+      - run: npm run gen:audio
+        env:
+          PIPER_PYTHON: python
       - run: npm run build
       - run: npm run verify:export
       - uses: actions/configure-pages@v5

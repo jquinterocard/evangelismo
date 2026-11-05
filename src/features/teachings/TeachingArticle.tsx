@@ -4,11 +4,26 @@ import type { Teaching } from "@/types";
 import { getCategory } from "@/data/categories";
 import { appConfig } from "@/lib/config";
 import { Illustration } from "@/components/illustrations";
+import { ListenPanel } from "@/features/audio/ListenPanel";
+import { TEACHING_SECTIONS, type SectionKey } from "@/features/audio/speech-text";
 
-function Block({ icon, title, children, tone = "plain" }: { icon: ReactNode; title: string; children: ReactNode; tone?: "plain" | "hope" | "rose" }) {
+function Block({
+  icon,
+  title,
+  children,
+  tone = "plain",
+  listen,
+}: {
+  icon: ReactNode;
+  title: string;
+  children: ReactNode;
+  tone?: "plain" | "hope" | "rose";
+  /** Sección del reproductor de voz que corresponde a este bloque. */
+  listen: SectionKey;
+}) {
   const bg = tone === "hope" ? "bg-hope-soft/70 border-hope/40" : tone === "rose" ? "bg-rose/35 border-rose" : "bg-surface border-line";
   return (
-    <section className={`rounded-2xl border p-5 sm:p-6 ${bg}`}>
+    <section id={`listen-${listen}`} className={`scroll-mt-24 rounded-2xl border p-5 sm:p-6 ${bg}`}>
       <h3 className="mb-2 flex items-center gap-2 text-lg font-semibold">
         <span className="text-gold-ink" aria-hidden>
           {icon}
@@ -31,7 +46,7 @@ export function TeachingArticle({ teaching, headingLevel = "h1" }: { teaching: T
         <H id={`t-${teaching.id}`} className="mt-3 text-3xl leading-tight font-semibold sm:text-4xl">
           {teaching.title}
         </H>
-        <figure className="mx-auto mt-5 max-w-2xl">
+        <figure id="listen-verse" className="mx-auto mt-5 max-w-2xl rounded-xl">
           <blockquote className="font-serif text-xl leading-relaxed text-navy-ink italic sm:text-2xl">
             “{teaching.verseText}”
           </blockquote>
@@ -50,19 +65,21 @@ export function TeachingArticle({ teaching, headingLevel = "h1" }: { teaching: T
         </a>
       </div>
 
-      <Block icon={<ScrollText className="size-5" />} title="Contexto bíblico">
+      <ListenPanel audioId={teaching.id} title={teaching.title} sections={TEACHING_SECTIONS} />
+
+      <Block icon={<ScrollText className="size-5" />} title="Contexto bíblico" listen="context">
         <p>{teaching.context}</p>
       </Block>
-      <Block icon={<BookOpenText className="size-5" />} title="Explicación">
+      <Block icon={<BookOpenText className="size-5" />} title="Explicación" listen="explanation">
         <p>{teaching.explanation}</p>
       </Block>
-      <Block icon={<Sparkles className="size-5" />} title="Reflexión" tone="rose">
+      <Block icon={<Sparkles className="size-5" />} title="Reflexión" tone="rose" listen="reflection">
         <p>{teaching.reflection}</p>
       </Block>
-      <Block icon={<Lightbulb className="size-5" />} title="Para vivirlo hoy" tone="hope">
+      <Block icon={<Lightbulb className="size-5" />} title="Para vivirlo hoy" tone="hope" listen="application">
         <p>{teaching.application}</p>
       </Block>
-      <Block icon={<HandHeart className="size-5" />} title="Oración sugerida">
+      <Block icon={<HandHeart className="size-5" />} title="Oración sugerida" listen="prayer">
         <p className="mb-2 text-sm text-muted">Si lo deseas, puedes orar con estas palabras:</p>
         <p className="font-serif text-lg italic">{teaching.prayer}</p>
       </Block>

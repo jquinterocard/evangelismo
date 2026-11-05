@@ -5,6 +5,9 @@ import {
   activitiesSchema,
   goalsSchema,
   learningProgressSchema,
+  LISTEN_SECTIONS,
+  listenPreferencesSchema,
+  type ListenPreferences,
   preferencesSchema,
   qrHistorySchema,
 } from "./schemas";
@@ -36,6 +39,16 @@ export const preferencesStore = createStore<Preferences>({
   version: 1,
   schema: preferencesSchema,
   defaultValue: () => ({ ...DEFAULT_PREFERENCES }),
+});
+
+export const DEFAULT_LISTEN_PREFERENCES: ListenPreferences = { voice: "f", rate: 1, sections: [...LISTEN_SECTIONS] };
+
+/** Preferencias de la narración (voz, velocidad y secciones a escuchar). */
+export const listenPreferencesStore = createStore<ListenPreferences>({
+  key: "listen",
+  version: 1,
+  schema: listenPreferencesSchema,
+  defaultValue: () => ({ ...DEFAULT_LISTEN_PREFERENCES, sections: [...DEFAULT_LISTEN_PREFERENCES.sections] }),
 });
 
 export const qrHistoryStore = createStore<QrRecord[]>({

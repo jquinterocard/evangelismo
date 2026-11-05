@@ -67,6 +67,7 @@ npm run check          # todo lo anterior en cadena
 npm run gen:sql        # regenera supabase/seed_teachings.sql desde el catálogo
 npm run gen:citas      # regenera docs/REVISION-CITAS.md
 npm run gen:icons      # regenera los íconos PWA
+npm run gen:audio      # genera la narración con Piper en public/audio/ (ver «Voz»)
 npm run supabase:local # simulador local de Supabase (PGlite) para probar el registro global
 ```
 
@@ -142,6 +143,30 @@ docs/                    SUPABASE.md, ARQUITECTURA.md, REVISION-CITAS.md
 Las enseñanzas están en `src/data/teachings/group-*.ts`. Para ocultar una sin borrarla, pon
 `active: false`. Después ejecuta `npm test` (valida esquema, ids y referencias únicas),
 `npm run gen:sql` (si usas Supabase) y `npm run gen:citas`.
+
+## Voz (narración con Piper)
+
+Cada enseñanza y tema de *Conociendo a Jesús* se puede escuchar. La voz la genera
+[Piper](https://github.com/rhasspy/piper), un sintetizador de voz neuronal open source, **al compilar**:
+el sitio sigue siendo estático y el visitante solo descarga MP3 pequeños (≈40 kbps, mono).
+El oyente elige voz femenina o masculina, velocidad y qué secciones escuchar; los ajustes se guardan
+en su dispositivo. Si no hay audio publicado, el reproductor simplemente no aparece.
+
+```bash
+python3 -m venv .venv-tts && .venv-tts/bin/pip install piper-tts==1.8.0   # una vez
+sudo apt install ffmpeg                                                    # si no lo tienes
+npm run gen:audio                          # todo (≈30 min la primera vez; luego solo lo que cambió)
+npm run gen:audio -- --only <id> --voice f # una enseñanza (o tema-<slug>) y una voz, para probar
+```
+
+- Las voces (`es_MX-claude-high` femenina y `es_MX-ald-medium` masculina, de
+  [rhasspy/piper-voices](https://huggingface.co/rhasspy/piper-voices)) se descargan a
+  `~/.cache/piper-voices` y se verifican por SHA-256. Para cambiarlas, edita `VOICES` en
+  `scripts/gen-audio.mjs`; revisa la licencia en el `MODEL_CARD` de cada voz.
+- El texto que se lee sale de `src/features/audio/speech-text.ts` (referencias como «Juan, capítulo 3,
+  versículo 16», guiones de diálogo, etc.). Si una palabra se pronuncia mal, corrígela ahí.
+- `public/audio/` no se versiona (≈70 MB). El workflow de GitHub Pages instala Piper y la genera
+  (con caché). En Vercel no se genera: el sitio funciona igual, pero sin narración.
 
 ## Texto bíblico
 
