@@ -163,6 +163,8 @@ npm run gen:audio -- --only <id> --voice f # una enseñanza (o tema-<slug>) y un
   [rhasspy/piper-voices](https://huggingface.co/rhasspy/piper-voices)) se descargan a
   `~/.cache/piper-voices` y se verifican por SHA-256. Para cambiarlas, edita `VOICES` en
   `scripts/gen-audio.mjs`; revisa la licencia en el `MODEL_CARD` de cada voz.
+- El versículo y la oración se leen en **modo sereno** (más despacio y con pausas más largas); se
+  ajusta en `SERENE` dentro de `scripts/gen-audio.mjs`.
 - El texto que se lee sale de `src/features/audio/speech-text.ts` (referencias como «Juan, capítulo 3,
   versículo 16», guiones de diálogo, etc.). Si una palabra se pronuncia mal, corrígela ahí.
 - `public/audio/` no se versiona (≈70 MB). El workflow de GitHub Pages instala Piper y la genera

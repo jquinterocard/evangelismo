@@ -36,6 +36,8 @@ const VOICES = {
 const VOICES_REV = "v1.0.0";
 const SENTENCE_SILENCE = 0.35;
 const BITRATE = "40k";
+/** Lectura serena: el versículo y la oración se leen más despacio y con pausas más largas. */
+const SERENE = { sections: ["verse", "prayer"], lengthFactor: 1.12, silence: 0.65 };
 /** Cambia si cambian los parámetros de síntesis/codificación, para regenerar todo. */
 const PARAMS = `${VOICES_REV}|${SENTENCE_SILENCE}|${BITRATE}|pad1`;
 
@@ -98,10 +100,10 @@ function startPiper(model, lengthScale) {
     for (const w of waiting.splice(0)) w.reject(new Error(`piper terminó con código ${code}`));
   });
   return {
-    synth: (text, out) =>
+    synth: (text, out, style = {}) =>
       new Promise((resolve, reject) => {
         waiting.push({ resolve, reject });
-        proc.stdin.write(`${JSON.stringify({ text, out })}\n`);
+        proc.stdin.write(`${JSON.stringify({ text, out, ...style })}\n`);
       }),
     close: () => new Promise((r) => (proc.stdin.end(), proc.on("close", r))),
   };
@@ -137,14 +139,17 @@ try {
     const todo = [];
     for (const [id, sections] of items) {
       for (const s of sections) {
-        const hash = createHash("sha256").update(`${PARAMS}|${v.name}|${v.lengthScale}|${s.text}`).digest("hex").slice(0, 10);
+        const serene = SERENE.sections.includes(s.key);
+        const style = serene ? { length_scale: +(v.lengthScale * SERENE.lengthFactor).toFixed(3), silence: SERENE.silence } : {};
+        const tag = serene ? `|serene:${style.length_scale}:${style.silence}` : "";
+        const hash = createHash("sha256").update(`${PARAMS}|${v.name}|${v.lengthScale}|${s.text}${tag}`).digest("hex").slice(0, 10);
         const file = join(outDir, vk, id, `${s.key}.mp3`);
         const prev = previous.items[id]?.[vk]?.[s.key];
         const entry = { d: prev?.d ?? 0, h: hash };
         ((manifest.items[id] ??= {})[vk] ??= {})[s.key] = entry;
         const selected = (!only || only === id) && (!onlyVoice || onlyVoice === vk);
         if (prev?.h === hash && existsSync(file) && !force) kept++;
-        else if (selected) todo.push({ id, s, file, entry });
+        else if (selected) todo.push({ id, s, file, entry, style });
         else delete manifest.items[id][vk][s.key]; // sin audio vigente: no se anuncia
       }
     }
@@ -155,7 +160,7 @@ try {
     const limit = Math.max(1, cpus().length - 1);
     for (const [n, job] of todo.entries()) {
       const wav = join(work, `${vk}-${n}.wav`);
-      await piper.synth(job.s.text, wav);
+      await piper.synth(job.s.text, wav, job.style);
       mkdirSync(join(outDir, vk, job.id), { recursive: true });
       pending.push(
         toMp3(wav, job.file).then(() => {
