@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { act, render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { listenPreferencesStore } from "@/lib/stores";
+import { withBasePath } from "@/lib/config";
 import { ListenPanel } from "./ListenPanel";
 import { __resetAudioManifest, type AudioManifest } from "./manifest";
 import { TEACHING_SECTIONS } from "./speech-text";
@@ -23,6 +24,7 @@ function mockFetch(body: unknown, ok = true) {
 }
 
 const audio = () => document.querySelector("audio")!;
+const url = (path: string) => withBasePath(`/audio/${path}?v=abc`);
 
 beforeEach(() => {
   __resetAudioManifest();
@@ -60,14 +62,14 @@ describe("ListenPanel", () => {
     render(<ListenPanel audioId="t1" title="T" sections={TEACHING_SECTIONS} />);
     const play = await screen.findByRole("button", { name: "Escuchar" });
     expect(screen.getByText(/1 de 3/)).toBeInTheDocument();
-    expect(audio().getAttribute("src")).toBe("/audio/f/t1/verse.mp3?v=abc");
+    expect(audio().getAttribute("src")).toBe(url("f/t1/verse.mp3"));
 
     await userEvent.click(play);
     expect(HTMLMediaElement.prototype.play).toHaveBeenCalled();
     expect(screen.getByRole("button", { name: "Pausar" })).toBeInTheDocument();
 
     act(() => void audio().dispatchEvent(new Event("ended")));
-    expect(audio().getAttribute("src")).toBe("/audio/f/t1/context.mp3?v=abc");
+    expect(audio().getAttribute("src")).toBe(url("f/t1/context.mp3"));
     expect(screen.getByText(/2 de 3/)).toBeInTheDocument();
   });
 
@@ -78,7 +80,7 @@ describe("ListenPanel", () => {
 
     await userEvent.click(screen.getByRole("button", { name: "Masculina" }));
     expect(listenPreferencesStore.read().voice).toBe("m");
-    expect(audio().getAttribute("src")).toBe("/audio/m/t1/verse.mp3?v=abc");
+    expect(audio().getAttribute("src")).toBe(url("m/t1/verse.mp3"));
 
     await userEvent.click(screen.getByRole("button", { name: "1,25×" }));
     expect(listenPreferencesStore.read().rate).toBe(1.25);
@@ -86,7 +88,7 @@ describe("ListenPanel", () => {
 
     await userEvent.click(screen.getByRole("checkbox", { name: "Versículo" }));
     expect(listenPreferencesStore.read().sections).not.toContain("verse");
-    expect(audio().getAttribute("src")).toBe("/audio/m/t1/context.mp3?v=abc");
+    expect(audio().getAttribute("src")).toBe(url("m/t1/context.mp3"));
 
     await userEvent.click(screen.getByRole("button", { name: "Solo el versículo" }));
     expect(listenPreferencesStore.read().sections).toEqual(["verse"]);
@@ -106,9 +108,9 @@ describe("ListenPanel", () => {
     mockFetch(manifest);
     render(<ListenPanel variant="compact" audioId="t1" title="T" sections={TEACHING_SECTIONS} />);
     await userEvent.click(await screen.findByRole("button", { name: /Escuchar versículo/ }));
-    expect(audio().getAttribute("src")).toBe("/audio/f/t1/verse.mp3?v=abc");
+    expect(audio().getAttribute("src")).toBe(url("f/t1/verse.mp3"));
     act(() => void audio().dispatchEvent(new Event("ended")));
-    expect(audio().getAttribute("src")).toBe("/audio/f/t1/verse.mp3?v=abc");
+    expect(audio().getAttribute("src")).toBe(url("f/t1/verse.mp3"));
     expect(screen.getByRole("button", { name: /Escuchar versículo/ })).toBeInTheDocument();
   });
 });
